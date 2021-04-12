@@ -85,7 +85,43 @@ public class FundController {
 		} 
 		
 	   
-	   
+	 public String updateItem(int fundid , int cusid , String fund_desc , String status)
+	 { 
+	 	String output = "";
+
+	 	try{ 
+	 		Connection con = connect();
+	 	
+	 	if (con == null) {
+	 		
+	 		return"Error while connecting to the database for updating."; 
+	 		} 
+	 	// create a prepared statement
+	 	String query = "UPDATE Fund SET fund_desc = ? , status = ?   FundID FundID=? AND cusid = ?";
+	 	
+	 	PreparedStatement preparedStmt = con.prepareStatement(query); 
+	 	
+	 	// binding values
+	 	preparedStmt.setString(1, fund_desc);
+	 	preparedStmt.setString(2, status);
+	 	preparedStmt.setInt(3,fundid );
+	 	preparedStmt.setInt(4,cusid );
+	 
+	 	
+	 	// execute the statement
+	 	preparedStmt.execute(); 
+	 	con.close();
+	 	output = "Fund Details Updated successfully....";
+	 	
+	 	}catch (Exception e) { 
+	 		output = "Error while updating the Details...Fund ID = '"+fundid+"'";
+	 		System.err.println(e.getMessage()); 
+	 		
+	 	  } return output; 
+	 	
+	 	} 
+	 
+	 
 		
 		//Deleting the fund details
 		public static String deleteFund(int fundid) {
@@ -106,7 +142,7 @@ public class FundController {
 				con.close();
 				output = "Data deleted successfully";
 			} catch (Exception e) {
-				output = "Error while deleting the Data...";
+				output = "Error while deleting the Fund details of id '"+fundid+"'...";
 				System.err.println(e.getMessage());
 			}
 			return output;
