@@ -17,7 +17,7 @@ public class store {
 		{e.printStackTrace();}
 		return con;
 	}
-
+	//Insert Method
 	public String insertProduct(String pro_ID, String desc, String qty, String price, String category)
 	{
 		String output = "";
@@ -48,6 +48,53 @@ public class store {
 		{
 		output = "Error while inserting the products.";
 		System.err.println(e.getMessage());
+		}
+		return output;
+	}
+	//Read Method
+	public String readProduct()
+	{
+		String output = "";
+		try
+		{
+		Connection con = connect();
+		if (con == null)
+		{return "Error while connecting to the database for reading."; }
+		
+		// Prepare the html table to be displayed
+		output = "<table border='1'><tr><th>Product ID</th><th>Description</th>" + "<th>Quantity</th>" + "<th>Price</th>" +	"<th>Category</th>" +"<th>Update</th><th>Remove</th></tr>";
+		String query = "select * from product";
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		
+		// iterate through the rows in the result set
+		while (rs.next())
+		{
+			String pro_ID = Integer.toString(rs.getInt("pro_ID"));
+			String desc = rs.getString("desc");
+			String qty = rs.getString("qty");
+			String price = Double.toString(rs.getDouble("price"));
+			String category = rs.getString("category");
+			
+			// Add into the html table
+			output += "<tr><td>" + pro_ID + "</td>";
+			output += "<td>" + desc + "</td>";
+			output += "<td>" + qty + "</td>";
+			output += "<td>" + price + "</td>";
+			output += "<td>" + category + "</td>";
+			
+			// buttons
+			output += "<td><input name='btnUpdate' type='button' value='Update'class='btn btn-secondary'></td>"+ "<td><form method='post' action='store.jsp'>"+ "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"+ "<input name='pro_ID' type='hidden' value='" + pro_ID+ "'>" + "</form></td></tr>";
+		}
+		con.close();
+		
+		// Complete the html table
+		output += "</table>";
+		}
+		catch (Exception e)
+		{
+			output = "Error while reading the products.";
+			System.err.println(e.getMessage());
 		}
 		return output;
 	}
