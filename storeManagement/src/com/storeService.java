@@ -40,4 +40,27 @@ public class storeService {
 			String output = strObj.insertProduct(pro_ID, desc, qty, price, category);
 			return output;
 		}
+		
+//update operation
+		@PUT
+		@Path("/")
+		@Consumes(MediaType.APPLICATION_JSON)
+		@Produces(MediaType.TEXT_PLAIN)
+		public String updateProduct(String productData)
+		{
+			
+			//Convert the input string to a JSON object
+			JsonObject productObject = new JsonParser().parse(productData).getAsJsonObject();
+			
+			//Read the values from the JSON object
+			String pro_ID = productObject.get("itemID").getAsString();
+			String desc = productObject.get("itemCode").getAsString();
+			String qty = productObject.get("itemName").getAsString();
+			String price = productObject.get("itemPrice").getAsString();
+			String category = productObject.get("itemDesc").getAsString();
+			
+			String output = strObj.updateProduct(pro_ID, desc, qty, price, category);
+			
+			return output;
+		}
 }
