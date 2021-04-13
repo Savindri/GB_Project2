@@ -98,4 +98,38 @@ public class store {
 		}
 		return output;
 	}
+	
+	//update method
+	public String updateProduct(String pro_ID, String desc, String qty, String price, String category)
+	{
+	String output = "";
+	try
+	{
+		Connection con = connect();
+		if (con == null)
+		{return "Error while connecting to the database for updating."; }
+		
+		// create a prepared statement
+		String query = "UPDATE product SET pro_ID=?,desc=?,qty=?,price=?,category=? WHERE pro_ID=?";
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		
+		// binding values
+		preparedStmt.setString(1, pro_ID);
+		preparedStmt.setString(2, desc);
+		preparedStmt.setInt(3, 2);
+		preparedStmt.setDouble(4, Double.parseDouble(price));
+		preparedStmt.setString(5, category);
+		
+		// execute the statement
+		preparedStmt.execute();
+		con.close();
+		output = "Updated successfully";
+	}
+	catch (Exception e)
+	{
+		output = "Error while updating the product.";
+		System.err.println(e.getMessage());
+	}
+	return output;
+	}
 }
