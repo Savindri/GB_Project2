@@ -70,7 +70,7 @@ public class store {
 		// iterate through the rows in the result set
 		while (rs.next())
 		{
-			String pro_ID = Integer.toString(rs.getInt("pro_ID"));
+			String pro_ID = Integer.toString(rs.getInt("po_ID"));
 			String desc = rs.getString("desc");
 			String qty = rs.getString("qty");
 			String price = Double.toString(rs.getDouble("price"));

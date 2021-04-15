@@ -20,7 +20,7 @@ public class storeService {
 	store strObj = new store(); 
 		
 		@GET
-		@Path("/") 
+		@Path("/product") 
 		@Produces(MediaType.TEXT_HTML) 
 		public String readStore()
 		{ 
@@ -31,7 +31,7 @@ public class storeService {
 		@Path("/")
 		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 		@Produces(MediaType.TEXT_PLAIN)
-		public String insertProduct(@FormParam("pro_ID") String pro_ID,
+		public String insertProduct(@FormParam("po_ID") String pro_ID,
 									@FormParam("desc") String desc,
 									@FormParam("qty") String qty,
 									@FormParam("price") String price,
