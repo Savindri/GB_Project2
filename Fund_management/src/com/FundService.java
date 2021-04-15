@@ -34,10 +34,10 @@ FundController fundC = new FundController();
 	@Produces(MediaType.TEXT_PLAIN) 
 	
 	//Getting the Fund details from the xml to insert
-	public String AddNewFund(@FormParam("") String a,  
-			@FormParam("") String b,
-			@FormParam("") String c,   
-			@FormParam("") String d) { 
+	public String AddNewFund(@FormParam("CustomerId") String a,  
+							 @FormParam("ProjectID") String b,
+						     @FormParam("") String c,   
+							 @FormParam("") String d) { 
 		
 		return ""; 
 		}
