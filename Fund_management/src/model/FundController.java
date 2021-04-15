@@ -1,23 +1,15 @@
 package model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 
-import com.mysql.cj.xdevapi.Statement;
 import util.DBConnect;
 
 public class FundController {
@@ -25,9 +17,10 @@ public class FundController {
 	
 	
 	
-	 public String insertFund(int fundid , int cusid , String fund_desc , String fundamt, String requestDate, String status) {
+	 public String insertFund(String ProjID , String fund_desc , String fundamt) {
 			
 			String output = "";
+			int FundID;
 			
 			try{ 
 				
@@ -42,26 +35,45 @@ public class FundController {
 			// create a prepared statement
 				PreparedStatement preparedStmt = con.prepareStatement(query); 
 				
-		
+				
+			// Get the Project ID of the Fund from Project Micro Service
+			Client client = new Client();
+			WebResource resource = client.resource("http://localhost:8080/Lab05Rest/ItemService/Items");
+			String response = resource.queryParam("id", ProjID).accept(MediaType.TEXT_PLAIN).get(String.class);
+
+							
 			// binding values
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setInt(2, cusid);
+			preparedStmt.setString(2, ProjID);
 			preparedStmt.setString(3, fund_desc);
 			preparedStmt.setDouble(4, Double.parseDouble(fundamt)); 			
 			
 			// execute the statement
 			preparedStmt.execute(); 
 			
+			//retrieving the fund id from the fund Table
+			String queryslt = "SELECT FundID FROM  Fund WHERE ProjID = ? ORDER BY FundID DESC LIMIT 1"; 
+			PreparedStatement preparedStmt2 = con.prepareStatement(queryslt);	
+			preparedStmt2.setString(1, ProjID);
+			
+			// execute the statement
+			ResultSet resultSet = preparedStmt2.executeQuery();
+
+			//retriving the Fundid
+			if (resultSet.next()) {
+				 FundID = resultSet.getInt(1);
+			} else {
+				return "Error whiling loading data..";
+						}
 			con.close();
-			output = " ============= Fund ID :'"+fundid+"' - Details inserted successfully =============";
+			
+			output = " ============= Fund ID :'"+FundID+"' - Details inserted successfully =============";
 			
 			 }catch(Exception e) {
-				 			 
+				 e.printStackTrace();				 			 
 			 }
 			
-				 return output; 
-				
-			
+				 return output; 		
 		} 
 		
 	   
