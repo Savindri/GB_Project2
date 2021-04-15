@@ -28,8 +28,15 @@ FundController fundC = new FundController();
 		return "";
 		} 
 	
+	@GET@Path("/read/{FundID}") 
+	@Produces(MediaType.TEXT_HTML) 	
+	public String readFunddetails(String FundID) { 
+		
+		return "";
+		} 
+	
 	@POST
-	@Path("/")
+	@Path("/Add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN) 
 	
@@ -44,7 +51,7 @@ FundController fundC = new FundController();
 	
 	
 	@PUT
-	@Path("/Funds")
+	@Path("/Update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN) 
 	//Getting the Fund details from the xml to Update
@@ -64,7 +71,7 @@ FundController fundC = new FundController();
 	}
 	
 	@DELETE
-	@Path("/Fun")
+	@Path("/Delete")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String DeleteFundDetails(String FundID)

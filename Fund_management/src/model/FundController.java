@@ -44,7 +44,7 @@ public class FundController {
 							
 			// binding values
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setString(2, ProjID);
+			preparedStmt.setString(2, response);
 			preparedStmt.setString(3, fund_desc);
 			preparedStmt.setDouble(4, Double.parseDouble(fundamt)); 			
 			
