@@ -2,11 +2,7 @@ package com;
 
 //For REST Service
 import javax.ws.rs.*; 
-import javax.ws.rs.core.MediaType; 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces; 
-
+import javax.ws.rs.core.MediaType;
 
 //For JSON
 import com.google.gson.*;
@@ -35,9 +31,9 @@ FundController fundC = new FundController();
 		} 
 	
 	@GET
-	@Path("/read/{FundID}") 
+	@Path("/{FundID}") 
 	@Produces(MediaType.TEXT_HTML) 	
-	public String readFunddetails(int FundID) { 
+	public String readFunddetails(@PathParam("FundID") int FundID) { 
 		
 		 return fundC.readFundDetails(FundID);
 		} 
@@ -80,21 +76,22 @@ FundController fundC = new FundController();
 		
 	}
 	
-//	@DELETE
-//	@Path("/Delete")
-//	@Consumes(MediaType.APPLICATION_XML)
-//	@Produces(MediaType.TEXT_PLAIN)
-//	public String DeleteFundDetails(String FundID)
-//	{
-//	
-//		//Convert the input string to an XML document
-//	
-//		Document doc = Jsoup.parse(FundID, "", Parser.xmlParser());
-//	
-//		//Read the value from the element <itemID>
-//	
-//		String itemID = doc.select("FundID").text();	
-//		
-//		return "";
-//	}
+	@DELETE
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String DeleteFundDetails(String FundData)
+	{
+	
+		//Convert the input string to an XML document	
+		Document doc = Jsoup.parse(FundData, "", Parser.xmlParser());
+	
+		//Read the value from the element <itemID	
+		String FundID = doc.select("FundID").text();
+		
+		String output =fundC.deleteFund(FundID);
+		
+		
+		return output;
+	}
 }

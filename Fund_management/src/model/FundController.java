@@ -19,8 +19,6 @@ import util.DBConnect;
 public class FundController {
 	
 	
-	
-	
 	 public String insertFund(String ProjID , String fund_desc , String fundamt) {
 			
 			String output = "";
@@ -193,13 +191,15 @@ public class FundController {
 	 public String readFundDetails(int id)
 		{
 		 
-		
 			String output = "";
 			try
 			{
 				 Connection con = DBConnect.connect();
+				 
 			if (con == null)
-			{return "Error while connecting to the database for reading."; }
+			{
+				return "Error while connecting to the database for reading."; 
+			}
 			
 			// Prepare the html table to be displayed
 			output = "<table border='1'><tr>"
@@ -212,7 +212,7 @@ public class FundController {
 					  +	"<th>Fund Grant Date</th>" ;
 					
 			
-			String query = "select * from fund Where FundID = ?";
+			String query = "Select * from fund where FundID = ?";
 			
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
 			
@@ -257,7 +257,9 @@ public class FundController {
 	 
 		
 		//Deleting the fund details
-		public static String deleteFund(int fundid) {
+		public static String deleteFund(String fundID) {
+			
+			int FundID = Integer.parseInt(fundID);
 			String output = "";
 			try {
 				 Connection con = DBConnect.connect();
@@ -265,17 +267,17 @@ public class FundController {
 					return "Error while connecting to the database for deleting.";
 				}
 				// create a prepared statement
-				String query = "delete from `Fund` where `FundID` = ?";
+				String query = "delete from fund where FundID = ?";
 				
 				PreparedStatement preparedStmt = con.prepareStatement(query);
 				// binding values
-				preparedStmt.setInt(1, fundid);
+				preparedStmt.setInt(1, FundID);
 				// execute the statement
 				preparedStmt.execute();
 				con.close();
 				output = "============== Data deleted successfully ===================";
 			} catch (Exception e) {
-				output = "Error while deleting the Fund details of id '"+fundid+"'...";
+				output = "Error while deleting the Fund details of id '"+fundID+"'...";
 				System.err.println(e.getMessage());
 			}
 			return output;
