@@ -3,6 +3,7 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -37,16 +38,16 @@ public class FundController {
 			// create a prepared statement
 				PreparedStatement preparedStmt = con.prepareStatement(query); 
 				
-//				
-//			// Get the Project ID of the Fund from Project Micro Service
-//			Client client = new Client();
-//			WebResource resource = client.resource("http://localhost:8080/Lab05Rest/ItemService/Items");
-//			String response = resource.queryParam("id", ProjID).accept(MediaType.TEXT_PLAIN).get(String.class);
+				
+			// Get the Project ID of the Fund from Project Micro Service
+			Client client = new Client();
+			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items");
+			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
 
 							
 			// binding values
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setString(2, ProjID);
+			preparedStmt.setString(2, response);
 			preparedStmt.setString(3, fund_desc);
 			preparedStmt.setString(4, (fundamt)); 			
 			
@@ -122,6 +123,7 @@ public class FundController {
 	 		
 	 	  } return output; 
 	 	
+	 	  
 	 	} 
 	 
 	 
@@ -284,7 +286,34 @@ public class FundController {
 		}
 
 
-
-	
+	public String retval() {
+		String output = "";
+		
+		try {
+			
+			 Connection con = DBConnect.connect();
+			if (con == null) {
+				return "Error while connecting to the database for deleting.";
+			}
+			// create a prepared statement
+			String query = "SELECT FundID FROM fund ORDER BY FundID DESC LIMIT 1 ";
+			
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			
+			ResultSet rs = preparedStmt.executeQuery(query);
+			while (rs.next())
+			{
+				String FundID = Integer.toString(rs.getInt("FundID"));
+				return (FundID);
+			}
+			preparedStmt.execute();
+			con.close();
+			
+		} catch (Exception e) {
+			
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
 
 }

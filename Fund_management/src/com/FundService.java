@@ -21,6 +21,16 @@ public class FundService {
 
 FundController fundC = new FundController();
 	
+@GET
+@Path("/retID") 
+@Produces(MediaType.TEXT_HTML) 	
+public String retID() { 
+	
+	
+	return fundC.retval();
+	} 
+
+
 	
 	@GET
 	@Path("/") 
@@ -89,7 +99,7 @@ FundController fundC = new FundController();
 		//Read the value from the element <itemID	
 		String FundID = doc.select("FundID").text();
 		
-		String output =fundC.deleteFund(FundID);
+		String output =FundController.deleteFund(FundID);
 		
 		
 		return output;
