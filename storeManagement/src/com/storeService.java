@@ -14,11 +14,11 @@ import org.jsoup.*;
 import org.jsoup.parser.*; 
 import org.jsoup.nodes.Document; 
 
-//read operation
+
 @Path("/Test")
 public class storeService {
 	store strObj = new store(); 
-		
+//read operation		
 		@GET
 		@Path("/product") 
 		@Produces(MediaType.TEXT_HTML) 
@@ -28,22 +28,22 @@ public class storeService {
 		}
 //insert operation
 		@POST
-		@Path("/")
+		@Path("/product")
 		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 		@Produces(MediaType.TEXT_PLAIN)
-		public String insertProduct(@FormParam("po_ID") String pro_ID,
+		public String insertProduct(@FormParam("proCode") String proCode,
 									@FormParam("desc") String desc,
 									@FormParam("qty") String qty,
 									@FormParam("price") String price,
 									@FormParam("category") String category)
 		{
-			String output = strObj.insertProduct(pro_ID, desc, qty, price, category);
+			String output = strObj.insertProduct(proCode, desc, qty, price, category);
 			return output;
 		}
 		
 //update operation
 		@PUT
-		@Path("/")
+		@Path("/product")
 		@Consumes(MediaType.APPLICATION_JSON)
 		@Produces(MediaType.TEXT_PLAIN)
 		public String updateProduct(String productData)
@@ -53,20 +53,21 @@ public class storeService {
 			JsonObject productObject = new JsonParser().parse(productData).getAsJsonObject();
 			
 			//Read the values from the JSON object
-			String pro_ID = productObject.get("itemID").getAsString();
-			String desc = productObject.get("itemCode").getAsString();
-			String qty = productObject.get("itemName").getAsString();
-			String price = productObject.get("itemPrice").getAsString();
-			String category = productObject.get("itemDesc").getAsString();
+			String pro_ID = productObject.get("pro_ID").getAsString();
+			String proCode = productObject.get("proCode").getAsString();
+			String desc = productObject.get("desc").getAsString();
+			String qty = productObject.get("qty").getAsString();
+			String price = productObject.get("price").getAsString();
+			String category = productObject.get("category").getAsString();
 			
-			String output = strObj.updateProduct(pro_ID, desc, qty, price, category);
+			String output = strObj.updateProduct(pro_ID, proCode, desc, qty, price, category);
 			
 			return output;
 		}
 		
 //delete operation
 		@DELETE
-		@Path("/")
+		@Path("/product")
 		@Consumes(MediaType.APPLICATION_XML)
 		@Produces(MediaType.TEXT_PLAIN)
 		public String deleteProduct(String productData)
