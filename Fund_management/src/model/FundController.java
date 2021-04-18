@@ -44,6 +44,7 @@ public class FundController {
 				return "You need to enter an amount";				
 			}
 			
+			
 			try{ 
 				
 		     Connection con = DBConnect.connect();
@@ -105,26 +106,29 @@ public class FundController {
 		} 
 		
 	   
-	 public String updateItem(int fundid , String ProjID , String fund_desc , String status)
+	 public String updateItem(int fundid , String Fund_announcement , String Fund_duration,String instructions)
 	 { 
 	 	String output = "";
 	 	
 	 	//Checking for the null values
-	 	if(ProjID.equals("") ) {
+	 	if(fundid == 0 ) {
 	 		
-	 		return "Field ProjectID cannot be empty";
+	 		return "Field ProjectID cannot be 0";	
 	 		
-	 	}else if( fund_desc.equals("") ) {
+	 	}else if( Fund_announcement.equals("") ) {
 	 		
-	 		return "Field description cannot be empty";
+	 		return "Announcement cannot be empty";
 	 		
-	 	}else if(status.equals("") ) {
+	 	}else if(Fund_duration.equals("") ) {
 	 		
-	 		return "Field status cannot be empty";
+	 		return "Fund_duration cannot be empty";
+	 		
+	 	}else if(instructions.equals("") ) {
+	 		
+	 		return "instructions cannot be empty";
 	 	}
 	 	
-	 	
-	 	
+	 	 	
 	 	try{ 
 	 		//Testing database connection
 	 		 Connection con = DBConnect.connect();
@@ -135,7 +139,7 @@ public class FundController {
 	 		
 	 		} 
 	 	//Query to execute
-	 	String query = "UPDATE fund SET Fund_desc = ? , F_Grant_status = ? , F_Grant_Date = ? Where FundID=? ";
+	 	String query = "UPDATE fund SET Fund_Announcment = ? , F_Duration = ? , A_Instructions = ? ,D_modified_date = ? Where FundID = ? ";
 	     
 	 	// create a prepared statement
 	 	PreparedStatement preparedStmt = con.prepareStatement(query); 
@@ -146,10 +150,11 @@ public class FundController {
 	 	String d1 = dateFormat.format(date);
 	 	
 	 	// binding values
-	 	preparedStmt.setString(1, fund_desc);
-	 	preparedStmt.setString(2, status);
-	 	preparedStmt.setString(3,d1);
-	 	preparedStmt.setInt(4,fundid );
+	 	preparedStmt.setString(1, Fund_announcement);
+	 	preparedStmt.setString(2, Fund_duration);
+	 	preparedStmt.setString(3,instructions);
+	 	preparedStmt.setString(4,d1);	 	
+	 	preparedStmt.setInt(5,fundid );
 	 	//preparedStmt.setString(4,ProjID );
 	 
 	 	
@@ -163,9 +168,8 @@ public class FundController {
 	 		System.err.println(e.getMessage()); 
 	 		
 	 	  } return output; 
-	 	
-	 	  
-	 	} 
+	 		 	  
+	 } 
 	 
 	 
 	 public String readFundDetails()
@@ -185,10 +189,10 @@ public class FundController {
 					  + "<th>Fund ID</th>"
 					  + "<th>Project ID</th>"
 					  + "<th>Fund Request Date</th>" 
-					  + "<th>Fund Fund Announcement</th>" 
-					  +	"<th>Fund Fund Duration</th>" 
-					  +	"<th>Fund Instructions to Applicant</th>" 
-					  +	"<th>Fund Fund Amount</th>" 
+					  + "<th> Fund Announcement</th>" 
+					  +	"<th> Fund Duration</th>" 
+					  +	"<th> Instructions to Applicant</th>" 
+					  +	"<th> Fund Amount</th>" 
 					  +	"<th>Details Updated Date</th>" ;
 					
 			//Query to execute
@@ -217,9 +221,9 @@ public class FundController {
 				output += "<td>" + ReqDate + "</td>";
 				output += "<td>" + FundAnnounce + "</td>";
 				output += "<td>" + Duration + "</td>";
-				output += "<td>" + Instructions + "</td>";
-				output += "<td>" + ModifyDate + "</td>";
+				output += "<td>" + Instructions + "</td>";				
 				output += "<td>" + amount + "</td>";
+				output += "<td>" + ModifyDate + "</td>";
 						
 			}
 			con.close();

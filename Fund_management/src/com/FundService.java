@@ -77,11 +77,12 @@ public String retID() {
 		
 		//Read the values from the JSON object
 		int FundID1 = FundObject.get("FundID").getAsInt();
-		String ProjectID = FundObject.get("ProjectID").getAsString();
-		String FundDesc = FundObject.get("FundDesc").getAsString(); 
-		String Fundstatus = FundObject.get("Fundstatus").getAsString();
+		String Fund_announcement = FundObject.get("Announcement").getAsString();
+		String Fund_duration = FundObject.get("Duration").getAsString(); 
+		String instructions = FundObject.get("Intructions").getAsString(); 
+		
 		       
-		String output = fundC.updateItem(FundID1, ProjectID, FundDesc, Fundstatus); 
+		String output = fundC.updateItem(FundID1, Fund_announcement, Fund_duration, instructions); 
 		return output;
 		
 		
