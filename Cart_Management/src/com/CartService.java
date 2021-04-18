@@ -21,6 +21,14 @@ public class CartService {
 	
 	CartController cartObj = new CartController();
 	
+	//to read cart
+	@GET
+	@Path("/") 
+	@Produces(MediaType.TEXT_HTML) 
+	public String readCart() { 
+		return cartObj.readCart(); 
+	}
+	
 	//to insert into cart
 	@POST
 	@Path("/") 
