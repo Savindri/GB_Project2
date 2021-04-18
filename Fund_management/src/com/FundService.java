@@ -26,8 +26,8 @@ FundController fundC = new FundController();
 @Produces(MediaType.TEXT_HTML) 	
 public String retID() { 
 	
-	
 	return fundC.retval();
+	
 	} 
 
 
@@ -54,10 +54,12 @@ public String retID() {
 	@Produces(MediaType.TEXT_PLAIN) 
 	
 	//Getting the Fund details from the xml to insert
-	public String AddNewFund(@FormParam("FundDesc") String FundDesc,
+	public String AddNewFund(@FormParam("FundAnnounce") String FundAnnounce,
+							 @FormParam("Duration") String Duration,
+							 @FormParam("instructions") String instructions,
 						     @FormParam("FundAmount") String amount) 
 		{ 
-				String output = fundC.insertFund(FundDesc, amount);
+				String output = fundC.insertFund(FundAnnounce,Duration,instructions,amount);
 				
 				return output; 
 		}

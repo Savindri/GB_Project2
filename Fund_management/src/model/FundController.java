@@ -20,18 +20,28 @@ import util.DBConnect;
 public class FundController {
 	
 	
-	 public String insertFund( String fund_desc , String fundamt) {
+	 public String insertFund( String Fund_announcement , String Fund_duration , String instructions , String amount) {
 			
 			String output = "";
+			Double FundAmt = Double.parseDouble(amount);
 			int FundIDs;
 			
-			if(fund_desc.equals("")) {
+			//checking the null value insertion
+			if(Fund_announcement.equals("")) {
 				
 				 return "You need to enter a Description";
 				 
-			}else if(fundamt.equals("")) {
+			}else if(Fund_duration.equals("")) {
 				
-				return "You need to enter Fund amount";				
+				return "You need to enter Duration";
+				
+			}else if(instructions.equals("")) {
+				
+				return "You need to enter instructions";
+				
+			}else if(amount.equals("")) {
+				
+				return "You need to enter an amount";				
 			}
 			
 			try{ 
@@ -42,36 +52,42 @@ public class FundController {
 				return"Error while connecting to the database for inserting."; 
 				} 
 			
-			  String query = "insert into fund (FundID,ProjectID,Fund_desc,Fund_amount)"
-				  		+ " values(?,?,?,?)";
+			  String query = "insert into fund (FundID,ProjectID,Fund_Announcment,F_Duration,A_Instructions,Fund_amount)"
+				  		+ " values(?,?,?,?,?,?)";
 			// create a prepared statement
-				PreparedStatement preparedStmt = con.prepareStatement(query); 
+			PreparedStatement preparedStmt = con.prepareStatement(query); 
 				
 				
 			// Get the Project ID of the Fund from Project Micro Service
-			Client client = new Client();
+			Client client = new Client(); //Creating a
+			//Created webresource to access the specified URL
 			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items");
+			//Capturing the returning value
 			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
 
 							
 			// binding values
 			preparedStmt.setInt(1, 0);
 			preparedStmt.setString(2, response);
-			preparedStmt.setString(3, fund_desc);
-			preparedStmt.setString(4, (fundamt)); 			
+			preparedStmt.setString(3, Fund_announcement);
+			preparedStmt.setString(4, (Fund_duration));
+			preparedStmt.setString(5, (instructions));
+			preparedStmt.setDouble(6, (FundAmt));
+			
 			
 			// execute the statement
 			preparedStmt.execute(); 
 			
 			//retrieving the fund id from the fund Table
 			String queryslt = "SELECT FundID FROM  fund WHERE ProjectID = ? ORDER BY FundID DESC LIMIT 1"; 
+			//creating the prepared statement to execute the query
 			PreparedStatement preparedStmt2 = con.prepareStatement(queryslt);	
 			preparedStmt2.setString(1, response);
 			
 			// execute the statement
 			ResultSet resultSet = preparedStmt2.executeQuery();
 
-			//retriving the Fundid
+			//retriving the Fundid to a variable
 			if (resultSet.next()) {
 				 FundIDs = resultSet.getInt(1);
 			} else {
@@ -79,7 +95,7 @@ public class FundController {
 						}
 			con.close();
 			
-			output = " ============= Details reguarding ID :'"+FundIDs+"' inserted successfully =============";
+			output = " ============= Details reguarding ID :'"+FundAmt+"' inserted successfully =============";
 			
 			 }catch(Exception e) {
 				 e.printStackTrace();				 			 
@@ -93,7 +109,7 @@ public class FundController {
 	 { 
 	 	String output = "";
 	 	
-	 	
+	 	//Checking for the null values
 	 	if(ProjID.equals("") ) {
 	 		
 	 		return "Field ProjectID cannot be empty";
@@ -155,6 +171,7 @@ public class FundController {
 	 public String readFundDetails()
 		{
 			String output = "";
+			//Create the DB Conenction
 			try
 			{
 				 Connection con = DBConnect.connect();
@@ -167,15 +184,18 @@ public class FundController {
 			output = "<table border='1'><tr>"
 					  + "<th>Fund ID</th>"
 					  + "<th>Project ID</th>"
-					  + "<th>Fund Description</th>" 
-					  + "<th>Fund amount</th>" 
-					  +	"<th>Fund Request Date</th>" 
-					  +	"<th>Fund Request Status</th>" 
-					  +	"<th>Fund Grant Date</th>" ;
+					  + "<th>Fund Request Date</th>" 
+					  + "<th>Fund Fund Announcement</th>" 
+					  +	"<th>Fund Fund Duration</th>" 
+					  +	"<th>Fund Instructions to Applicant</th>" 
+					  +	"<th>Fund Fund Amount</th>" 
+					  +	"<th>Details Updated Date</th>" ;
 					
-			
+			//Query to execute
 			String query = "select * from fund";
+			//Creating the prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
+			//getting the values to a result set
 			ResultSet rs = preparedStmt.executeQuery(query);
 			
 			// iterate through the rows in the result set
@@ -183,23 +203,24 @@ public class FundController {
 			{
 				String FundID = Integer.toString(rs.getInt("FundID"));
 				String ProjID = (rs.getString("ProjectID"));
-				String Funddesc = rs.getString("Fund_desc");
-				String Fundamount = rs.getString("Fund_amount");
-				Date ReqDate = rs.getDate("F_Request_date");
-				String ReqStatus = rs.getString("F_Grant_status");
-				Date GrantDate = rs.getDate("F_Grant_Date");
-			
+				Date ReqDate = rs.getDate("F_Request_Date");
+				String FundAnnounce = rs.getString("Fund_Announcment");
+				String Duration = rs.getString("F_Duration");
+				String Instructions = rs.getString("A_Instructions");				
+				Date ModifyDate = rs.getDate("D_modified_date");
+				Double amount = rs.getDouble("Fund_amount");
+				
 				
 				// Add into the html table
 				output += "<tr><td>" + FundID + "</td>";
 				output += "<td>" + ProjID + "</td>";
-				output += "<td>" + Funddesc + "</td>";
-				output += "<td>" + Fundamount + "</td>";
 				output += "<td>" + ReqDate + "</td>";
-				output += "<td>" + ReqStatus + "</td>";
-				output += "<td>" + GrantDate + "</td>";
-				
-		
+				output += "<td>" + FundAnnounce + "</td>";
+				output += "<td>" + Duration + "</td>";
+				output += "<td>" + Instructions + "</td>";
+				output += "<td>" + ModifyDate + "</td>";
+				output += "<td>" + amount + "</td>";
+						
 			}
 			con.close();
 			
@@ -219,6 +240,7 @@ public class FundController {
 		{
 		 
 			String output = "";
+			//create DB Connection
 			try
 			{
 				 Connection con = DBConnect.connect();
@@ -232,19 +254,20 @@ public class FundController {
 			output = "<table border='1'><tr>"
 					  + "<th>Fund ID</th>"
 					  + "<th>Project ID</th>"
-					  + "<th>Fund Description</th>" 
-					  + "<th>Fund amount</th>" 
-					  +	"<th>Fund Request Date</th>" 
-					  +	"<th>Fund Request Status</th>" 
-					  +	"<th>Fund Grant Date</th>" ;
+					  + "<th>Fund Request Date</th>" 
+					  + "<th>Fund Fund Announcement</th>" 
+					  +	"<th>Fund Fund Duration</th>" 
+					  +	"<th>Fund Instructions to Applicant</th>" 
+					  +	"<th>Fund Fund Amount</th>" 
+					  +	"<th>Details Updated Date</th>" ;
 					
-			
+			//Query to execute
 			String query = "Select * from fund where FundID = ?";
-			
+			//creating the prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
 			
 			preparedStmt.setInt(1,id);
-			
+			//Retrieving the values to a result set
 			ResultSet rs = preparedStmt.executeQuery(query);
 			
 			// iterate through the rows in the result set
@@ -252,21 +275,23 @@ public class FundController {
 			{
 				String FundID = Integer.toString(rs.getInt("FundID"));
 				String ProjID = (rs.getString("ProjectID"));
-				String Funddesc = rs.getString("Fund_desc");
-				String Fundamount = rs.getString("Fund_amount");
-				Date ReqDate = rs.getDate("F_Request_date");
-				String ReqStatus = rs.getString("F_Grant_status");
-				Date GrantDate = rs.getDate("F_Grant_Date");
-			
+				Date ReqDate = rs.getDate("F_Request_Date");
+				String FundAnnounce = rs.getString("Fund_Announcment");
+				String Duration = rs.getString("F_Duration");
+				String Instructions = rs.getString("A_Instructions");				
+				Date ModifyDate = rs.getDate("D_modified_date");
+				Double amount = rs.getDouble("Fund_amount");
+				
 				
 				// Add into the html table
 				output += "<tr><td>" + FundID + "</td>";
 				output += "<td>" + ProjID + "</td>";
-				output += "<td>" + Funddesc + "</td>";
-				output += "<td>" + Fundamount + "</td>";
 				output += "<td>" + ReqDate + "</td>";
-				output += "<td>" + ReqStatus + "</td>";
-				output += "<td>" + GrantDate + "</td>";
+				output += "<td>" + FundAnnounce + "</td>";
+				output += "<td>" + Duration + "</td>";
+				output += "<td>" + Instructions + "</td>";
+				output += "<td>" + ModifyDate + "</td>";
+				output += "<td>" + amount + "</td>";
 				
 			}
 			con.close();
