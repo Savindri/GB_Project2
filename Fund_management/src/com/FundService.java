@@ -58,7 +58,7 @@ public String retID() {
 							 @FormParam("Duration") String Duration,
 							 @FormParam("instructions") String instructions,
 						     @FormParam("FundAmount") String amount) 
-		{ 
+		{       //Passing values to the controller class      
 				String output = fundC.insertFund(FundAnnounce,Duration,instructions,amount);
 				
 				return output; 
@@ -81,7 +81,7 @@ public String retID() {
 		String Fund_duration = FundObject.get("Duration").getAsString(); 
 		String instructions = FundObject.get("Intructions").getAsString(); 
 		
-		       
+		//Passing values to the controller class       
 		String output = fundC.updateItem(FundID1, Fund_announcement, Fund_duration, instructions); 
 		return output;
 		
@@ -100,7 +100,7 @@ public String retID() {
 	
 		//Read the value from the element <itemID	
 		String FundID = doc.select("FundID").text();
-		
+		//Passing the ID to the controller class 
 		String output =FundController.deleteFund(FundID);
 		
 		
