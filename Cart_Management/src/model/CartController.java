@@ -93,5 +93,29 @@ public class CartController {
 		 } 
 		 return output; 
 	 }
+	
+	public String deleteFromCart(String cartID) { 
+		 String output = ""; 
+		 try{ 
+			 Connection con = dbObj.connect(); 
+			 if (con == null) {
+				 return "Error while connecting to the database for deleting."; 
+			 } 
+			 // create a prepared statement
+			 String query = "delete from cart where cartID=?"; 
+			 PreparedStatement preparedStmt = con.prepareStatement(query); 
+			 // binding values
+			 preparedStmt.setInt(1, Integer.parseInt(cartID)); 
+			 // execute the statement
+			 preparedStmt.execute(); 
+			 con.close(); 
+			 output = "Items Deleted successfully!"; 
+		 } 
+		 catch (Exception e) { 
+			 output = "Error while deleting the items!"; 
+			 System.err.println(e.getMessage()); 
+		 } 
+		 return output; 
+	 }
 
 }

@@ -21,6 +21,7 @@ public class CartService {
 	
 	CartController cartObj = new CartController();
 	
+	
 	//to read cart
 	@GET
 	@Path("/") 
@@ -28,6 +29,7 @@ public class CartService {
 	public String readCart() { 
 		return cartObj.readCart(); 
 	}
+	
 	
 	//to insert into cart
 	@POST
@@ -45,5 +47,22 @@ public class CartService {
 		String unitPrice = cartObject.get("unitPrice").getAsString();
 		String output = cartObj.insertToCart(item, quantity, unitPrice);
 		return output; 
-		}
+	}
+	
+	
+	//to delete items from cart
+	@DELETE
+	@Path("/")
+	//use XML for the input
+	@Consumes(MediaType.APPLICATION_XML) 
+	@Produces(MediaType.TEXT_PLAIN) 
+	//read the XML dataset as a string
+	public String deletFromeOrder(String cartData){ 
+		//Convert the input string to an XML document
+		 Document doc = Jsoup.parse(cartData, "", Parser.xmlParser());		 
+		//Read the value from the element <orderID>
+		 String cartID = doc.select("cartID").text(); 
+		 String output = cartObj.deleteFromCart(cartID); 
+		 return output; 
+	}
 }
