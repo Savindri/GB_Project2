@@ -24,7 +24,7 @@ public class FundController {
 			
 			String output = "";
 			Double FundAmt = Double.parseDouble(amount);
-			int FundIDs;
+		
 			
 			//checking the null value insertion
 			if(Fund_announcement.equals("")) {
@@ -39,7 +39,7 @@ public class FundController {
 				
 				return "You need to enter instructions";
 				
-			}else if(amount.equals("")) {
+			}else if(FundAmt.equals(null)) {
 				
 				return "You need to enter an amount";				
 			}
@@ -58,18 +58,18 @@ public class FundController {
 			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
 				
-				
-			// Get the Project ID of the Fund from Project Micro Service
-			Client client = new Client(); //Creating a
-			//Created webresource to access the specified URL
-			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items");
-			//Capturing the returning value
-			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
-
-							
+//				
+//			// Get the Project ID of the Fund from Project Micro Service
+//			Client client = new Client(); //Creating a
+//			//Created webresource to access the specified URL
+//			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items");
+//			//Capturing the returning value
+//			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+//
+//							
 			// binding values
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setString(2, response);
+			preparedStmt.setString(2, Fund_duration);
 			preparedStmt.setString(3, Fund_announcement);
 			preparedStmt.setString(4, (Fund_duration));
 			preparedStmt.setString(5, (instructions));
@@ -79,21 +79,21 @@ public class FundController {
 			// execute the statement
 			preparedStmt.execute(); 
 			
-			//retrieving the fund id from the fund Table
-			String queryslt = "SELECT FundID FROM  fund WHERE ProjectID = ? ORDER BY FundID DESC LIMIT 1"; 
-			//creating the prepared statement to execute the query
-			PreparedStatement preparedStmt2 = con.prepareStatement(queryslt);	
-			preparedStmt2.setString(1, response);
-			
-			// execute the statement
-			ResultSet resultSet = preparedStmt2.executeQuery();
-
-			//retriving the Fundid to a variable
-			if (resultSet.next()) {
-				 FundIDs = resultSet.getInt(1);
-			} else {
-				return "Error whiling loading data..";
-						}
+//			//retrieving the fund id from the fund Table
+//			String queryslt = "SELECT FundID FROM  fund WHERE ProjectID = ? ORDER BY FundID DESC LIMIT 1"; 
+//			//creating the prepared statement to execute the query
+//			PreparedStatement preparedStmt2 = con.prepareStatement(queryslt);	
+//			preparedStmt2.setString(1, response);
+//			
+//			// execute the statement
+//			ResultSet resultSet = preparedStmt2.executeQuery();
+//
+//			//retriving the Fundid to a variable
+//			if (resultSet.next()) {
+//				 FundIDs = resultSet.getInt(1);
+//			} else {
+//				return "Error whiling loading data..";
+//						}
 			con.close();
 			
 			output = " ============= Details reguarding ID :'"+FundAmt+"' inserted successfully =============";
@@ -316,7 +316,9 @@ public class FundController {
 		public static String deleteFund(String fundID) {
 			
 			int FundID = Integer.parseInt(fundID);
+			
 			String output = "";
+			
 			try {
 				 Connection con = DBConnect.connect();
 				if (con == null) {
@@ -330,17 +332,23 @@ public class FundController {
 				preparedStmt.setInt(1, FundID);
 				// execute the statement
 				preparedStmt.execute();
+				
 				con.close();
+				
 				output = "============== Data deleted successfully ===================";
+				
 			} catch (Exception e) {
+				
 				output = "Error while deleting the Fund details of id '"+fundID+"'...";
 				System.err.println(e.getMessage());
+				
 			}
 			return output;
 		}
 
 
 	public String retval() {
+		
 		String output = "";
 		
 		try {
