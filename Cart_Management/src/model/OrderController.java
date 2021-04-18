@@ -161,5 +161,36 @@ public class OrderController {
 		 } 
 		 return output; 
 	 }
+	
+	public String updateOrder(String orderID, String CartID_f, String date, String custName, String address, String phone, String email) {
+    	String output = "";    	
+    	try{
+    		Connection con = dbObj.connect();
+    		if (con == null){
+	    		return "Error while connecting to the database for updating!";
+	    	}
+			String querry = "update order_ set CartID_f = ? , date = ? , custName = ? , address = ? , phone = ? , email = ? where orderID = ?";				
+			//create a prepared statement
+			PreparedStatement preparedStmt = con.prepareStatement(querry);				  
+			//binding values
+			preparedStmt.setInt(1, Integer.parseInt(CartID_f));
+			preparedStmt.setString(2, date);
+			preparedStmt.setString(3, custName);
+			preparedStmt.setString(4, address);
+			preparedStmt.setInt(5, Integer.parseInt(phone));
+			preparedStmt.setString(6, email);
+			//preparedStmt.setString(6, total);
+			preparedStmt.setInt(7, Integer.parseInt(orderID));
+			//execute the statement
+			preparedStmt.execute();
+			con.close();
+			output = "Order Updated successfully!";
+		}
+    	catch(Exception e){
+    		output = "Error while updating the order!"; 
+			 System.err.println(e.getMessage()); 
+		}  	
+    	return output;
+    }
 
 }

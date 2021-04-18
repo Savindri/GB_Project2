@@ -48,6 +48,29 @@ public class OrderService {
 	}	
 	
 	
+	//to update order
+	@PUT
+	@Path("/")
+	//accept the input as JSON
+	@Consumes(MediaType.APPLICATION_JSON) 
+	@Produces(MediaType.TEXT_PLAIN) 
+	public String updateOrder(String orderData) { 
+		//Convert the input string to a JSON object 
+		 JsonObject orderObject = new JsonParser().parse(orderData).getAsJsonObject(); 
+		//Read the values from the JSON object
+		 String orderID = orderObject.get("orderID").getAsString();
+		 String cartID_f = orderObject.get("cartID_f").getAsString();
+		 String date = orderObject.get("date").getAsString(); 
+		 String custName = orderObject.get("custName").getAsString(); 
+		 String address = orderObject.get("address").getAsString(); 
+		 String phone = orderObject.get("phone").getAsString();
+		 String email = orderObject.get("email").getAsString();
+		 //String total = orderObject.get("total").getAsString();
+		 String output = orderObj.updateOrder(orderID, cartID_f, date, custName, address, phone, email/*, total*/); 
+		 return output; 
+	}
+	
+	
 	//to delete order
 	@DELETE
 	@Path("/")
