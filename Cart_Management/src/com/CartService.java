@@ -14,6 +14,15 @@ import org.jsoup.nodes.Document;
 
 //To implement the RESTful API
 
+//@Path("/Test")
 public class CartService {
+	
+//	Cart cartObj = new Cart(); 
+//	@GET
+//	@Path("/") 
+//	@Produces(MediaType.TEXT_PLAIN) 
+//	public String readCart(){ 
+//		return "Cart Service Running..."; 
+//	}
 
 }
