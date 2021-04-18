@@ -20,10 +20,19 @@ import util.DBConnect;
 public class FundController {
 	
 	
-	 public String insertFund(String ProjID , String fund_desc , String fundamt) {
+	 public String insertFund( String fund_desc , String fundamt) {
 			
 			String output = "";
 			int FundIDs;
+			
+			if(fund_desc.equals("")) {
+				
+				 return "You need to enter a Description";
+				 
+			}else if(fundamt.equals("")) {
+				
+				return "You need to enter Fund amount";				
+			}
 			
 			try{ 
 				
@@ -57,7 +66,7 @@ public class FundController {
 			//retrieving the fund id from the fund Table
 			String queryslt = "SELECT FundID FROM  fund WHERE ProjectID = ? ORDER BY FundID DESC LIMIT 1"; 
 			PreparedStatement preparedStmt2 = con.prepareStatement(queryslt);	
-			preparedStmt2.setString(1, ProjID);
+			preparedStmt2.setString(1, response);
 			
 			// execute the statement
 			ResultSet resultSet = preparedStmt2.executeQuery();
@@ -83,6 +92,22 @@ public class FundController {
 	 public String updateItem(int fundid , String ProjID , String fund_desc , String status)
 	 { 
 	 	String output = "";
+	 	
+	 	
+	 	if(ProjID.equals("") ) {
+	 		
+	 		return "Field ProjectID cannot be empty";
+	 		
+	 	}else if( fund_desc.equals("") ) {
+	 		
+	 		return "Field description cannot be empty";
+	 		
+	 	}else if(status.equals("") ) {
+	 		
+	 		return "Field status cannot be empty";
+	 	}
+	 	
+	 	
 	 	
 	 	try{ 
 	 		//Testing database connection

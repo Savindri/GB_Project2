@@ -54,11 +54,10 @@ public String retID() {
 	@Produces(MediaType.TEXT_PLAIN) 
 	
 	//Getting the Fund details from the xml to insert
-	public String AddNewFund(@FormParam("ProjectID") String ProjectID,
-							 @FormParam("FundDesc") String FundDesc,
+	public String AddNewFund(@FormParam("FundDesc") String FundDesc,
 						     @FormParam("FundAmount") String amount) 
 		{ 
-				String output = fundC.insertFund(ProjectID, FundDesc, amount);
+				String output = fundC.insertFund(FundDesc, amount);
 				
 				return output; 
 		}
