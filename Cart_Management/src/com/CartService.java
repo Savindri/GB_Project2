@@ -50,6 +50,26 @@ public class CartService {
 	}
 	
 	
+	//to update cart
+	@PUT
+	@Path("/")
+	//accept the input as JSON
+	@Consumes(MediaType.APPLICATION_JSON)
+	//to produce a status message as an output in plain text
+	@Produces(MediaType.TEXT_PLAIN) 
+	public String updateCart(String cartData) { 
+		//Convert the input string to a JSON object 
+		 JsonObject cartObject = new JsonParser().parse(cartData).getAsJsonObject(); 
+		//Read the values from the JSON object
+		 String cartID = cartObject.get("cartID").getAsString(); 
+		 String item = cartObject.get("item").getAsString(); 
+		 String quantity = cartObject.get("quantity").getAsString();
+		 String unitPrice = cartObject.get("unitPrice").getAsString();
+		 String output = cartObj.updateCart(cartID, item, quantity, unitPrice); 
+		 return output; 
+	}
+	
+	
 	//to delete items from cart
 	@DELETE
 	@Path("/")

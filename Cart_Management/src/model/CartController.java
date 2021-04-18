@@ -117,5 +117,35 @@ public class CartController {
 		 } 
 		 return output; 
 	 }
+	
+	public String updateCart(String cartID ,String item, String quantity, String unitPrice) {
+    	String output = "";    	
+    	try{
+    		Connection con = dbObj.connect();
+    		if (con == null){
+	    		return "Error while connecting to the database for updating!";
+	    	}	
+			//String querry = "update cart set item = ? , quantity = ? , unitPrice = ? where cartID = ?";
+    		
+    		String querry = "update cart,order_ set cart.item = ? , cart.quantity = ? , cart.unitPrice = ?, order_.total = cart.quantity*cart.unitPrice where cartID = ? and cart.cartID = order_.cartID_f";
+			
+			//create a prepared statement
+			PreparedStatement preparedStmt = con.prepareStatement(querry);				  
+			//binding values
+			preparedStmt.setString(1,item );
+			preparedStmt.setString(2, quantity);
+			preparedStmt.setDouble(3, Double.parseDouble(unitPrice));
+			preparedStmt.setInt(4, Integer.parseInt(cartID));
+			//execute the statement
+			preparedStmt.execute();
+			con.close();
+			output = "Cart Updated successfully!";
+		}
+    	catch(Exception e){
+    		output = "Error while updating the cart!"; 
+			 System.err.println(e.getMessage()); 
+		}  	
+    	return output;
+    }
 
 }
