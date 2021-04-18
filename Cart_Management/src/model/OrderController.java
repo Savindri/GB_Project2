@@ -136,5 +136,30 @@ public class OrderController {
 		 } 
 		 return output; 
 	 }
+	
+	
+	public String deleteOrder(String orderID) { 
+		 String output = ""; 
+		 try{ 
+			 Connection con = dbObj.connect(); 
+			 if (con == null) {
+				 return "Error while connecting to the database for deleting."; 
+			 } 
+			 // create a prepared statement
+			 String query = "delete from order_ where orderID=?"; 
+			 PreparedStatement preparedStmt = con.prepareStatement(query); 
+			 // binding values
+			 preparedStmt.setInt(1, Integer.parseInt(orderID)); 
+			 // execute the statement
+			 preparedStmt.execute(); 
+			 con.close(); 
+			 output = "Order Deleted successfully!"; 
+		 } 
+		 catch (Exception e) { 
+			 output = "Error while deleting the order!"; 
+			 System.err.println(e.getMessage()); 
+		 } 
+		 return output; 
+	 }
 
 }
