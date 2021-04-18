@@ -20,6 +20,7 @@ public class OrderService {
 	
 	OrderController orderObj = new OrderController(); 
 	
+	
 	//to read order
 	@GET
 	@Path("/") 
@@ -29,6 +30,22 @@ public class OrderService {
 	}
 	
 	
+	//to insert order
+	@POST
+	@Path("/") 
+	//to specify the input type as form data
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	//to produce a status message as an output in plain text
+	@Produces(MediaType.TEXT_PLAIN) 
+	//to specify the form elements as the parameters to the insertOrder() method
+	public String insertOrder(@FormParam("date") String date, 
+								 @FormParam("custName") String custName, 
+								 @FormParam("address") String address, 
+								 @FormParam("phone") String phone,
+								 @FormParam("email") String email){ 
+		String output = orderObj.insertOrder(date, custName, address, phone, email); 
+		return output; 
+	}	
 
 
 }

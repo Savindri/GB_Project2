@@ -12,7 +12,59 @@ public class OrderController {
 	DBConnection dbObj = new DBConnection();
 	
 	
-
+	public String insertOrder(String date, String custName, String address, String phone, String email){ 
+		 String output = ""; 
+		 try{ 
+			 Connection con = dbObj.connect(); 
+			 if (con == null) {
+				 return "Error while connecting to the database for inserting."; 
+			 } 
+			 // create a prepared statement
+			 String query = "insert into order_(`orderID`,`cartID_f`,`date`,`custName`,`address`,`phone`,`email`,`total`)"
+					 			+ " values (?, ?, ?, ?, ?, ?, ?, ?)";	
+			 	
+			 	//calculate total amount
+			 	String query2 = "select quantity , unitPrice from cart order by cartID desc limit 1";
+				PreparedStatement preparedStmt2 = con.prepareStatement(query2); 
+				ResultSet rs = preparedStmt2.executeQuery(query2);
+				while (rs.next()){
+					 quantity = (rs.getInt("quantity"));
+			         unitPrice = (rs.getDouble("unitPrice")); 	
+				}
+				String total = Double.toString(quantity * unitPrice);
+				preparedStmt2.execute();
+				
+				//to get cartID as foreign key
+			 	String query3 = "select cartID from cart order by cartID desc limit 1";
+				PreparedStatement preparedStmt3 = con.prepareStatement(query3); 
+				ResultSet rs3 = preparedStmt3.executeQuery(query3);
+				while (rs3.next()){
+					foreignKey = rs3.getInt("cartID");
+				}
+				String cartID_f = Integer.toString(foreignKey);
+				preparedStmt3.execute();
+			
+			 PreparedStatement preparedStmt = con.prepareStatement(query);
+			 // binding values
+			 preparedStmt.setInt(1, 0);
+			 preparedStmt.setString(2, cartID_f);
+			 preparedStmt.setString(3, date); 
+			 preparedStmt.setString(4, custName);
+			 preparedStmt.setString(5, address);
+			 preparedStmt.setInt(6, Integer.parseInt(phone));
+			 preparedStmt.setString(7, email);
+			 preparedStmt.setString(8, total);
+			 // execute the statement
+			 preparedStmt.execute();
+			 con.close(); 
+			 output = "Order Inserted successfully!"; 
+		 } 
+		 catch (Exception e) { 
+			 output = "Error while inserting the order!"; 
+			 System.err.println(e.getMessage()); 
+		 } 
+		 return output; 
+	}
 	
 	
 	public String readOrder(){ 
