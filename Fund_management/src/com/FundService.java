@@ -40,12 +40,15 @@ public String retID() {
 		return fundC.readFundDetails();
 		} 
 	
+	
 	@GET
 	@Path("/{FundID}") 
 	@Produces(MediaType.TEXT_HTML) 	
-	public String readFunddetails(@PathParam("FundID") int FundID) { 
+	public String readFunddetailss(@PathParam("FundID") String ID) { 
 		
-		 return fundC.readFundDetails(FundID);
+		//return "id =" +ID;
+		return fundC.SearchFund(ID);
+		  
 		} 
 	
 	@POST

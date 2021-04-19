@@ -58,15 +58,15 @@ public class FundController {
 			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
 				
-//				
-//			// Get the Project ID of the Fund from Project Micro Service
-//			Client client = new Client(); //Creating a
-//			//Created webresource to access the specified URL
-//			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items");
-//			//Capturing the returning value
-//			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
-//
-//							
+				
+			// Get the Project ID of the Fund from Project Micro Service
+			Client client = new Client(); //Creating a
+			//Created webresource to access the specified URL
+			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items");
+			//Capturing the returning value
+			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+
+							
 			// binding values
 			preparedStmt.setInt(1, 0);
 			preparedStmt.setString(2, Fund_duration);
@@ -238,11 +238,48 @@ public class FundController {
 			}
 			return output;
 		}
+	
 	 
-	 
-	 public String readFundDetails(int id)
+		
+		//Deleting the fund details
+		public static String deleteFund(String fundID) {
+			
+			int FundID = Integer.parseInt(fundID);
+			
+			String output = "";
+			
+			try {
+				 Connection con = DBConnect.connect();
+				if (con == null) {
+					return "Error while connecting to the database for deleting.";
+				}
+				// create a prepared statement
+				String query = "delete from fund where FundID = ?";
+				
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				// binding values
+				preparedStmt.setInt(1, FundID);
+				// execute the statement
+				preparedStmt.execute();
+				
+				con.close();
+				
+				output = "============== Data deleted successfully ===================";
+				
+			} catch (Exception e) {
+				
+				output = "Error while deleting the Fund details of id '"+fundID+"'...";
+				System.err.println(e.getMessage());
+				
+			}
+			return output;
+		}
+		
+		
+		public String SearchFund(String id)
 		{
-		 
+			int fID = Integer.parseInt(id);
+			
 			String output = "";
 			//create DB Connection
 			try
@@ -251,26 +288,26 @@ public class FundController {
 				 
 			if (con == null)
 			{
-				return "Error while connecting to the database for reading."; 
+				//return "Error while connecting to the database for reading."; 
 			}
-			
 			// Prepare the html table to be displayed
 			output = "<table border='1'><tr>"
 					  + "<th>Fund ID</th>"
 					  + "<th>Project ID</th>"
-					  + "<th>Fund Request Date</th>" 
-					  + "<th>Fund Fund Announcement</th>" 
-					  +	"<th>Fund Fund Duration</th>" 
-					  +	"<th>Fund Instructions to Applicant</th>" 
-					  +	"<th>Fund Fund Amount</th>" 
+					  + "<th>Request Date</th>" 
+					  + "<th>Fund Announcement</th>" 
+					  +	"<th>Fund Duration</th>" 
+					  +	"<th>Instructions to Applicant</th>" 
+					  +	"<th>Fund Amount</th>" 
 					  +	"<th>Details Updated Date</th>" ;
-					
+			
 			//Query to execute
-			String query = "Select * from fund where FundID = ?";
+			String query = "SELECT * FROM fund WHERE FundID = ?";
 			//creating the prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
 			
-			preparedStmt.setInt(1,id);
+			preparedStmt.setInt(1,fID);			
+			
 			//Retrieving the values to a result set
 			ResultSet rs = preparedStmt.executeQuery(query);
 			
@@ -309,44 +346,26 @@ public class FundController {
 				System.err.println(e.getMessage());
 			}
 			return output;
-		}
-	 
+			
+			
+			
+			
+			
+		}		
 		
-		//Deleting the fund details
-		public static String deleteFund(String fundID) {
-			
-			int FundID = Integer.parseInt(fundID);
-			
-			String output = "";
-			
-			try {
-				 Connection con = DBConnect.connect();
-				if (con == null) {
-					return "Error while connecting to the database for deleting.";
-				}
-				// create a prepared statement
-				String query = "delete from fund where FundID = ?";
-				
-				PreparedStatement preparedStmt = con.prepareStatement(query);
-				// binding values
-				preparedStmt.setInt(1, FundID);
-				// execute the statement
-				preparedStmt.execute();
-				
-				con.close();
-				
-				output = "============== Data deleted successfully ===================";
-				
-			} catch (Exception e) {
-				
-				output = "Error while deleting the Fund details of id '"+fundID+"'...";
-				System.err.println(e.getMessage());
-				
-			}
-			return output;
-		}
-
-
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	public String retval() {
 		
 		String output = "";
