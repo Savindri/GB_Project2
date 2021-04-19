@@ -297,16 +297,15 @@ public class FundController {
 					  + "<th>Request Date</th>" 
 					  + "<th>Fund Announcement</th>" 
 					  +	"<th>Fund Duration</th>" 
-					  +	"<th>Instructions to Applicant</th>" 
-					  +	"<th>Fund Amount</th>" 
-					  +	"<th>Details Updated Date</th>" ;
+					  +	"<th>Instructions to Applicant</th>" 				 
+					  +	"<th>Details Updated Date</th>"
+					  +	"<th>Fund Amount</th>" ;
 			
 			//Query to execute
-			String query = "SELECT * FROM fund WHERE FundID = ?";
+			String query = "SELECT * FROM `fund` WHERE FundID = '"+id+"' ";
 			//creating the prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
-			
-			preparedStmt.setInt(1,fID);			
+		    //preparedStmt.setInt(1,fID);			
 			
 			//Retrieving the values to a result set
 			ResultSet rs = preparedStmt.executeQuery(query);
@@ -331,7 +330,7 @@ public class FundController {
 				output += "<td>" + FundAnnounce + "</td>";
 				output += "<td>" + Duration + "</td>";
 				output += "<td>" + Instructions + "</td>";
-				output += "<td>" + ModifyDate + "</td>";
+			    output += "<td>" + ModifyDate + "</td>";
 				output += "<td>" + amount + "</td>";
 				
 			}
