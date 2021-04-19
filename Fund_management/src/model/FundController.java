@@ -19,32 +19,19 @@ import util.DBConnect;
 
 public class FundController {
 	
+	//======================== Client Fund Requesting Method ============================= //
 	
-	 public String insertFund( String Fund_announcement , String Fund_duration , String instructions , String amount) {
+	 public String insertClientFund(String Fund_duration ,String ProjectID) {
 			
 			String output = "";
-			Double FundAmt = Double.parseDouble(amount);
-		
 			
 			//checking the null value insertion
-			if(Fund_announcement.equals("")) {
-				
-				 return "You need to enter a Description";
-				 
-			}else if(Fund_duration.equals("")) {
+			if(Fund_duration.equals("")) {
 				
 				return "You need to enter Duration";
 				
-			}else if(instructions.equals("")) {
-				
-				return "You need to enter instructions";
-				
-			}else if(FundAmt.equals(null)) {
-				
-				return "You need to enter an amount";				
 			}
-			
-			
+						
 			try{ 
 				
 		     Connection con = DBConnect.connect();
@@ -53,50 +40,32 @@ public class FundController {
 				return"Error while connecting to the database for inserting."; 
 				} 
 			
-			  String query = "insert into fund (FundID,ProjectID,Fund_Announcment,F_Duration,A_Instructions,Fund_amount)"
-				  		+ " values(?,?,?,?,?,?)";
+			  String query = "insert into fund (FundID,ProjectID,F_Duration,Fund_amount)"
+				  		+ " values(?,?,?,?)";
 			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query); 
 				
 				
 			// Get the Project ID of the Fund from Project Micro Service
-			Client client = new Client(); //Creating a
+			Client client = new Client(); //Creating a Client Object 
 			//Created webresource to access the specified URL
-			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items");
+			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items/'"+ProjectID+"'");
 			//Capturing the returning value
 			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
 
-							
+			
 			// binding values
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setString(2, Fund_duration);
-			preparedStmt.setString(3, Fund_announcement);
-			preparedStmt.setString(4, (Fund_duration));
-			preparedStmt.setString(5, (instructions));
-			preparedStmt.setDouble(6, (FundAmt));
-			
-			
+			preparedStmt.setString(2,(ProjectID));			
+			preparedStmt.setString(3,(Fund_duration));			
+			preparedStmt.setString(4,(response));
+					
 			// execute the statement
 			preparedStmt.execute(); 
 			
-//			//retrieving the fund id from the fund Table
-//			String queryslt = "SELECT FundID FROM  fund WHERE ProjectID = ? ORDER BY FundID DESC LIMIT 1"; 
-//			//creating the prepared statement to execute the query
-//			PreparedStatement preparedStmt2 = con.prepareStatement(queryslt);	
-//			preparedStmt2.setString(1, response);
-//			
-//			// execute the statement
-//			ResultSet resultSet = preparedStmt2.executeQuery();
-//
-//			//retriving the Fundid to a variable
-//			if (resultSet.next()) {
-//				 FundIDs = resultSet.getInt(1);
-//			} else {
-//				return "Error whiling loading data..";
-//						}
 			con.close();
 			
-			output = " ============= Details reguarding ID :'"+FundAmt+"' inserted successfully =============";
+			output = " ============= Details inserted successfully =============";
 			
 			 }catch(Exception e) {
 				 e.printStackTrace();				 			 
@@ -105,8 +74,71 @@ public class FundController {
 				 return output; 		
 		} 
 		
-	   
-	 public String updateItem(int fundid , String Fund_announcement , String Fund_duration,String instructions)
+	//======================== Client Fund Updating  Method ============================= //
+	 
+	 public String updateClientItem(int fundid ,String Fund_duration, String Amount)
+	 { 
+	 	String output = "";
+	 	
+	 	//Checking for the null values
+	 	if(fundid == 0) {
+	 		
+	 		return "Field FundID cannot be 0";	
+	 		
+	 	}else if( Fund_duration.equals("") ) {
+	 		
+	 		return "Duration cannot be empty";
+	 		
+	 	}else if(Amount.equals("")) {
+	 		
+	 		return "Amount cannot be empty";
+	 	}
+	 	
+	 	 	
+	 	try{ 
+			 		//Testing database connection
+			 		 Connection con = DBConnect.connect();
+			 	
+			 	if (con == null) {
+			 		
+			 		return"Error while connecting to the database for updating.";
+			 		
+			 		} 
+			 	//Query to execute
+			 	String query = "UPDATE fund SET  F_Duration = ? ,D_modified_date = ? ,Fund_amount = ? Where FundID = ? ";
+			     
+			 	// create a prepared statement
+			 	PreparedStatement preparedStmt = con.prepareStatement(query); 
+			 	
+			 	//Getting the local date 
+			 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			 	java.util.Date date =  new Date();
+			 	String d1 = dateFormat.format(date);
+			 	
+			 	// binding values
+			 	preparedStmt.setString(1, Fund_duration);
+			 	preparedStmt.setString(2, d1);
+			 	preparedStmt.setString(3,Amount);
+			 	preparedStmt.setInt(4,fundid);					
+			 	
+			 	// execute the statement
+			 	preparedStmt.execute(); 
+			 	con.close();
+			 	output = "================ Fund Details Updated successfully ================";
+	 	
+	 	}catch (Exception e) { 
+		 		output = "Error while updating the Details...Fund ID = '"+fundid+"'";
+		 		System.err.println(e.getMessage()); 
+	 		
+	 	  } 
+	 			return output; 
+	 		 	  
+	 } 
+	 
+	
+	//============================= Admin Updating the Fund Details ===========================// 
+		
+	 public String updateItem(int fundid , String Fund_announcement , String Fund_duration,String instructions , String Amount)
 	 { 
 	 	String output = "";
 	 	
@@ -130,47 +162,50 @@ public class FundController {
 	 	
 	 	 	
 	 	try{ 
-	 		//Testing database connection
-	 		 Connection con = DBConnect.connect();
-	 	
-	 	if (con == null) {
-	 		
-	 		return"Error while connecting to the database for updating.";
-	 		
-	 		} 
-	 	//Query to execute
-	 	String query = "UPDATE fund SET Fund_Announcment = ? , F_Duration = ? , A_Instructions = ? ,D_modified_date = ? Where FundID = ? ";
-	     
-	 	// create a prepared statement
-	 	PreparedStatement preparedStmt = con.prepareStatement(query); 
-	 	
-	 	//Getting the local date 
-	 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-	 	java.util.Date date =  new Date();
-	 	String d1 = dateFormat.format(date);
-	 	
-	 	// binding values
-	 	preparedStmt.setString(1, Fund_announcement);
-	 	preparedStmt.setString(2, Fund_duration);
-	 	preparedStmt.setString(3,instructions);
-	 	preparedStmt.setString(4,d1);	 	
-	 	preparedStmt.setInt(5,fundid );
-	 	//preparedStmt.setString(4,ProjID );
-	 
-	 	
-	 	// execute the statement
-	 	preparedStmt.execute(); 
-	 	con.close();
-	 	output = "================ Details of Fund ID : '"+fundid+"'  Updated successfully ================";
+			 		//Testing database connection
+			 		 Connection con = DBConnect.connect();
+			 	
+			 	if (con == null) {
+			 		
+			 		return"Error while connecting to the database for updating.";
+			 		
+			 		} 
+			 	//Query to execute
+			 	String query = "UPDATE fund SET Fund_Announcment = ? , F_Duration = ? , A_Instructions = ? ,D_modified_date = ? ,Fund_amount = ? Where FundID = ? ";
+			     
+			 	// create a prepared statement
+			 	PreparedStatement preparedStmt = con.prepareStatement(query); 
+			 	
+			 	//Getting the local date 
+			 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			 	java.util.Date date =  new Date();
+			 	String d1 = dateFormat.format(date);
+			 	
+			 	// binding values
+			 	preparedStmt.setString(1, Fund_announcement);
+			 	preparedStmt.setString(2, Fund_duration);
+			 	preparedStmt.setString(3,instructions);
+			 	preparedStmt.setString(4,d1);	
+			 	preparedStmt.setString(4,Amount);	
+			 	preparedStmt.setInt(5,fundid );
+			 	//preparedStmt.setString(4,ProjID );
+			 
+			 	
+			 	// execute the statement
+			 	preparedStmt.execute(); 
+			 	con.close();
+			 	output = "================ Details of Fund ID : '"+fundid+"'  Updated successfully ================";
 	 	
 	 	}catch (Exception e) { 
-	 		output = "Error while updating the Details...Fund ID = '"+fundid+"'";
-	 		System.err.println(e.getMessage()); 
+		 		output = "Error while updating the Details...Fund ID = '"+fundid+"'";
+		 		System.err.println(e.getMessage()); 
 	 		
-	 	  } return output; 
+	 	  } 
+	 			return output; 
 	 		 	  
 	 } 
 	 
+	  // ================================== Reading the all Fund Request Details =========================//
 	 
 	 public String readFundDetails()
 		{
@@ -241,7 +276,8 @@ public class FundController {
 	
 	 
 		
-		//Deleting the fund details
+		//============================= Fund Deleting Method ============================//
+	 
 		public static String deleteFund(String fundID) {
 			
 			int FundID = Integer.parseInt(fundID);
@@ -275,6 +311,7 @@ public class FundController {
 			return output;
 		}
 		
+		// ========================== Searching For a particular Fund Details =====================//
 		
 		public String SearchFund(String id)
 		{
@@ -345,27 +382,10 @@ public class FundController {
 				System.err.println(e.getMessage());
 			}
 			return output;
-			
-			
-			
-			
-			
+				
 		}		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	public String retval() {
+			
+	public String retval(String ID) {
 		
 		String output = "";
 		
@@ -376,15 +396,15 @@ public class FundController {
 				return "Error while connecting to the database for deleting.";
 			}
 			// create a prepared statement
-			String query = "SELECT FundID FROM fund ORDER BY FundID DESC LIMIT 1 ";
+			String query = "SELECT budget FROM Project Where ProposalID = '"+ID+"' ";
 			
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			
 			ResultSet rs = preparedStmt.executeQuery(query);
 			while (rs.next())
 			{
-				String FundID = Integer.toString(rs.getInt("FundID"));
-				return (FundID);
+				String Budget = Integer.toString(rs.getInt("FundID"));
+				return (Budget);
 			}
 			preparedStmt.execute();
 			con.close();
