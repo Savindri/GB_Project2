@@ -42,10 +42,11 @@ public class CartService {
 		//Convert the input string to a JSON object
 		JsonObject cartObject = new JsonParser().parse(cartData).getAsJsonObject();
 		//Read the values from the JSON object
+		String itemID = cartObject.get("itemID").getAsString();
 		String item = cartObject.get("item").getAsString(); 
 		String quantity = cartObject.get("quantity").getAsString();
 		String unitPrice = cartObject.get("unitPrice").getAsString();
-		String output = cartObj.insertToCart(item, quantity, unitPrice);
+		String output = cartObj.insertToCart(itemID, item, quantity, unitPrice);
 		return output; 
 	}
 	
@@ -61,11 +62,12 @@ public class CartService {
 		//Convert the input string to a JSON object 
 		 JsonObject cartObject = new JsonParser().parse(cartData).getAsJsonObject(); 
 		//Read the values from the JSON object
-		 String cartID = cartObject.get("cartID").getAsString(); 
+		 String cartID = cartObject.get("cartID").getAsString();
+		 String itemID = cartObject.get("itemID").getAsString();
 		 String item = cartObject.get("item").getAsString(); 
 		 String quantity = cartObject.get("quantity").getAsString();
 		 String unitPrice = cartObject.get("unitPrice").getAsString();
-		 String output = cartObj.updateCart(cartID, item, quantity, unitPrice); 
+		 String output = cartObj.updateCart(cartID, itemID, item, quantity, unitPrice); 
 		 return output; 
 	}
 	
