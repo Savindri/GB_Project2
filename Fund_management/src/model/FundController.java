@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.core.header.AcceptableMediaType;
 
 import util.DBConnect;
 
@@ -24,12 +25,12 @@ public class FundController {
 	 public String insertClientFund(String Fund_duration ,String ProjectID) {
 			
 			String output = "";
+			//int id = Integer.parseInt(ProjectID);
 			
 			//checking the null value insertion
 			if(Fund_duration.equals("")) {
 				
-				return "You need to enter Duration";
-				
+				return "You need to enter Duration";				
 			}
 						
 			try{ 
@@ -49,23 +50,25 @@ public class FundController {
 			// Get the Project ID of the Fund from Project Micro Service
 			Client client = new Client(); //Creating a Client Object 
 			//Created webresource to access the specified URL
-			WebResource resource = client.resource("http://localhost:8090/TestFund/FundServices/Items/'"+ProjectID+"'");
+			WebResource resources = client.resource("http://localhost:8090/Project_managements/ProjectService/project/retID/"+ProjectID);					
 			//Capturing the returning value
-			String response = resource.type(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+			String response = resources.queryParam("id", ProjectID).accept(MediaType.TEXT_PLAIN).get(String.class);
+			//String response = resources.type(MediaType.TEXT_PLAIN).get(String.class);
 
+			//Double amt = Double.parseDouble(response);
 			
 			// binding values
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setString(2,(ProjectID));			
+			preparedStmt.setInt(2,Integer.parseInt((ProjectID)));			
 			preparedStmt.setString(3,(Fund_duration));			
-			preparedStmt.setString(4,(response));
+			preparedStmt.setDouble(4,Double.parseDouble(response));
 					
 			// execute the statement
 			preparedStmt.execute(); 
 			
 			con.close();
 			
-			output = " ============= Details inserted successfully =============";
+			output = " ============= Details inserted successfully =============" +Fund_duration;
 			
 			 }catch(Exception e) {
 				 e.printStackTrace();				 			 
@@ -76,7 +79,7 @@ public class FundController {
 		
 	//======================== Client Fund Updating  Method ============================= //
 	 
-	 public String updateClientItem(int fundid ,String Fund_duration, String Amount)
+	 public String updateClientFundReq(int fundid ,String Fund_duration, String Amount)
 	 { 
 	 	String output = "";
 	 	
@@ -396,14 +399,14 @@ public class FundController {
 				return "Error while connecting to the database for deleting.";
 			}
 			// create a prepared statement
-			String query = "SELECT budget FROM Project Where ProposalID = '"+ID+"' ";
+			String query = "SELECT budget FROM project_proposals Where proposal_ID = '"+ID+"' ";
 			
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			
 			ResultSet rs = preparedStmt.executeQuery(query);
 			while (rs.next())
 			{
-				String Budget = Integer.toString(rs.getInt("FundID"));
+				String Budget = Double.toString(rs.getDouble("budget"));
 				return (Budget);
 			}
 			preparedStmt.execute();

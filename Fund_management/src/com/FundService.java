@@ -7,7 +7,8 @@ import javax.ws.rs.core.MediaType;
 
 //For JSON
 import com.google.gson.*;
-
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 
 import model.FundController;
 
@@ -26,14 +27,8 @@ public class FundService {
 FundController fundC = new FundController();
 
 
-@GET
-@Path("/retID/{ID}") 
-@Produces(MediaType.TEXT_HTML) 	
-public String retPrice(@PathParam("ID") String ID) { 
-	
-	return fundC.retval(ID);
-	
-	}
+
+
 
 // =================== Client Fund insertion =====================//
 
@@ -43,8 +38,7 @@ public String retPrice(@PathParam("ID") String ID) {
 @Produces(MediaType.TEXT_PLAIN) 
 
 //Getting the Fund details from the xml to insert
-public String AddNewFund(@FormParam("Duration") String Duration,							
-					     @FormParam("FundAmount") String amount, 
+public String AddNewFund(@FormParam("Duration") String Duration,												     
 						 @FormParam("ProjectID") String ProjID)
 	{      
 			//Passing values to the controller class      
@@ -71,7 +65,7 @@ public String UpdateClintFundDetails(String Funddate) {
 			String Amount = FundObject.get("Fund_amount").getAsString();
 			
 			//Passing values to the controller class       
-			String output = fundC.updateClientItem(FundID1, Fund_duration,Amount); 
+			String output = fundC.updateClientFundReq(FundID1, Fund_duration,Amount); 
 			return output;
 	
 	
