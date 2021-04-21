@@ -18,8 +18,7 @@ import org.jsoup.nodes.Document;
 @Path("/Order") 
 public class OrderService {
 	
-	OrderController orderObj = new OrderController(); 
-	
+	OrderController orderObj = new OrderController(); 	
 	
 	//to read order
 	@GET
@@ -45,7 +44,7 @@ public class OrderService {
 								 @FormParam("email") String email){ 
 		String output = orderObj.insertOrder(date, custName, address, phone, email); 
 		return output; 
-	}	
+	}
 	
 	
 	//to update order
@@ -59,14 +58,12 @@ public class OrderService {
 		 JsonObject orderObject = new JsonParser().parse(orderData).getAsJsonObject(); 
 		//Read the values from the JSON object
 		 String orderID = orderObject.get("orderID").getAsString();
-		 String cartID_f = orderObject.get("cartID_f").getAsString();
 		 String date = orderObject.get("date").getAsString(); 
 		 String custName = orderObject.get("custName").getAsString(); 
 		 String address = orderObject.get("address").getAsString(); 
 		 String phone = orderObject.get("phone").getAsString();
 		 String email = orderObject.get("email").getAsString();
-		 //String total = orderObject.get("total").getAsString();
-		 String output = orderObj.updateOrder(orderID, cartID_f, date, custName, address, phone, email/*, total*/); 
+		 String output = orderObj.updateOrder(orderID, date, custName, address, phone, email); 
 		 return output; 
 	}
 	

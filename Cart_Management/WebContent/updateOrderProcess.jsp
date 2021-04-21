@@ -6,7 +6,6 @@
 <!-- Calling Update -->
 <%
 	if (request.getParameter("orderID") != null &&
-		request.getParameter("cartID_f") != null &&
 		request.getParameter("date") != null && 
 		request.getParameter("custName") != null &&
 		request.getParameter("address") != null &&
@@ -14,7 +13,6 @@
 		request.getParameter("email") != null){
 		OrderController orderObj = new OrderController();
 		String stsMsg = orderObj.updateOrder(request.getParameter("orderID"),
-												request.getParameter("cartID_f"),
 												request.getParameter("date"),
 												request.getParameter("custName"),
 												request.getParameter("address"),

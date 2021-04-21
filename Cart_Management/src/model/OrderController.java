@@ -20,7 +20,7 @@ public class OrderController {
 				 return "Error while connecting to the database for inserting."; 
 			 } 
 			 // create a prepared statement
-			 String query = "insert into order_(`orderID`,`cartID_f`,`date`,`custName`,`address`,`phone`,`email`,`total`)"
+			 String query = "insert into order_(`orderID`,`cartID`,`date`,`custName`,`address`,`phone`,`email`,`total`)"
 					 			+ " values (?, ?, ?, ?, ?, ?, ?, ?)";	
 			 	
 			 	//calculate total amount
@@ -41,13 +41,13 @@ public class OrderController {
 				while (rs3.next()){
 					foreignKey = rs3.getInt("cartID");
 				}
-				String cartID_f = Integer.toString(foreignKey);
+				String cartID = Integer.toString(foreignKey);
 				preparedStmt3.execute();
 			
 			 PreparedStatement preparedStmt = con.prepareStatement(query);
 			 // binding values
 			 preparedStmt.setInt(1, 0);
-			 preparedStmt.setString(2, cartID_f);
+			 preparedStmt.setString(2, cartID);
 			 preparedStmt.setString(3, date); 
 			 preparedStmt.setString(4, custName);
 			 preparedStmt.setString(5, address);
@@ -83,7 +83,7 @@ public class OrderController {
 			 			+ "<th>Address</th>"
 			 			+ "<th>Phone</th>"
 			 			+ "<th>Email</th>"
-			 			+ "<th>Total Amount</th>"
+			 			+ "<th>Total Amount (Rs.)</th>"
 			 			+ "<th>Update</th>"
 						+ "<th>Remove</th>"
 			 			+ "</tr>"; 
@@ -94,7 +94,7 @@ public class OrderController {
 			 // iterate through the rows in the result set
 			 while (rs.next()) { 
 				 String orderID = Integer.toString(rs.getInt("orderID"));
-				 String cartID_f = Integer.toString(rs.getInt("cartID_f"));
+				 String cartID = Integer.toString(rs.getInt("cartID"));
 				 String date = rs.getString("date");
 				 String custName = rs.getString("custName");
 				 String address = rs.getString("address");
@@ -102,7 +102,7 @@ public class OrderController {
 				 String email = rs.getString("email");
 				 String total = rs.getString("total");
 				 //  Add a row into the html table
-				 output += "<td>" + cartID_f + "</td>";
+				 output += "<td>" + cartID + "</td>";
 				 output += "<td>" + date + "</td>";
 				 output += "<td>" + custName + "</td>";
 				 output += "<td>" + address + "</td>";
@@ -113,7 +113,7 @@ public class OrderController {
 				 output += "<td><form method='post' action='updateOrder.jsp'>"
 				 		 + "<input name='btnUpdate' type='submit' value='Update' class='btn btn-secondary'></td>"
 				 		 + "<input name='orderID' type='hidden' value='" + orderID + "'>"
-				 		 + "<input name='cartID_f' type='hidden' value='" + cartID_f + "'>"
+				 		 + "<input name='cartID' type='hidden' value='" + cartID + "'>"
 				 		 + "<input name='date' type='hidden' value='" + date + "'>"
 				 		 + "<input name='custName' type='hidden' value='" + custName + "'>"
 				 		 + "<input name='address' type='hidden' value='" + address + "'>"
@@ -162,25 +162,24 @@ public class OrderController {
 		 return output; 
 	 }
 	
-	public String updateOrder(String orderID, String CartID_f, String date, String custName, String address, String phone, String email) {
+	
+	public String updateOrder(String orderID, String date, String custName, String address, String phone, String email) {
     	String output = "";    	
     	try{
     		Connection con = dbObj.connect();
     		if (con == null){
 	    		return "Error while connecting to the database for updating!";
 	    	}
-			String querry = "update order_ set CartID_f = ? , date = ? , custName = ? , address = ? , phone = ? , email = ? where orderID = ?";				
+			String querry = "update order_ set date = ? , custName = ? , address = ? , phone = ? , email = ? where orderID = ?";				
 			//create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(querry);				  
 			//binding values
-			preparedStmt.setInt(1, Integer.parseInt(CartID_f));
-			preparedStmt.setString(2, date);
-			preparedStmt.setString(3, custName);
-			preparedStmt.setString(4, address);
-			preparedStmt.setInt(5, Integer.parseInt(phone));
-			preparedStmt.setString(6, email);
-			//preparedStmt.setString(6, total);
-			preparedStmt.setInt(7, Integer.parseInt(orderID));
+			preparedStmt.setString(1, date);
+			preparedStmt.setString(2, custName);
+			preparedStmt.setString(3, address);
+			preparedStmt.setInt(4, Integer.parseInt(phone));
+			preparedStmt.setString(5, email);
+			preparedStmt.setInt(6, Integer.parseInt(orderID));
 			//execute the statement
 			preparedStmt.execute();
 			con.close();

@@ -5,7 +5,7 @@
 <!-- retrieving the passed parameters from Order.jsp to update the form -->
 <%
 	String orderID = request.getParameter("orderID");
-	String cartID_f = request.getParameter("cartID_f");
+	String cartID = request.getParameter("cartID");
 	String date = request.getParameter("date");
 	String custName =  request.getParameter("custName");
 	String address = request.getParameter("address");
@@ -30,7 +30,7 @@
 				<h2>Update Order</h2>
 				<form method="post" action="updateOrderProcess.jsp">
 					<input name="orderID" type="text" value="<%=orderID%>" hidden><br>
-					<input name="cartID_f" type="text" value="<%=cartID_f%>" hidden><br>
+					<input name="cartID" type="text" value="<%=cartID%>" hidden><br>
 						Date: <input name="date" type="date" value="<%=date%>" required class="form-control"><br>
 						Customer Name: <input name="custName" type="text" value="<%=custName%>" required class="form-control"><br>
 						Delivery Address: <input name="address" type="text" value="<%=address%>" required class="form-control"><br>
@@ -39,7 +39,7 @@
 					
 							<input name="btnSubmit" type="submit" value="Update" class="btn btn-primary">
 								<input name='orderID' type='hidden' value="orderID">
-								<input name='cartID_f' type='hidden' value="cartID_f">
+								<input name='cartID' type='hidden' value="cartID">
 								<input name='custName' type='hidden' value="custName">
 								<input name='address' type='hidden' value="address">
 								<input name='phone' type='hidden' value="phone">
