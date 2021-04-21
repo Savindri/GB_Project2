@@ -1,16 +1,26 @@
-This is a group project of the module Programming Application and Frameworks at  SLIIT
+**This is a group project of the module Programming Application and Frameworks at  SLIIT**
 
-Technologies Used
+**Technologies Used**
+
   -Java Eclipse workspace
+	
+	
   -Java - JAX_RS (Jersy) on Tomcat Server
+	
+	
   -Phpmyadmin database
   
   
-Team Members.
+**Team Members.**
+
   -V.A.S Perera
+	
   -G.P.R.A Kavirathne
+	
   -D.M Weerasinghe
+	
   -P.A.N.D Panditharathne
+	
   -E.M.B.S Ekanayake
  
  
