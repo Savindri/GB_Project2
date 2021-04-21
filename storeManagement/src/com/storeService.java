@@ -15,7 +15,7 @@ import org.jsoup.parser.*;
 import org.jsoup.nodes.Document; 
 
 
-@Path("/Test")
+@Path("/pro")
 public class storeService {
 	store strObj = new store(); 
 //read operation		

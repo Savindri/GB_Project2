@@ -66,7 +66,7 @@ public class store {
 			{return "Error while connecting to the database for reading."; }
 			
 			// Prepare the html table to be displayed
-			output = "<table border='1'><tr><th>Product Code</th><th>Description</th>" + "<th>Quantity</th>" + "<th>Price</th>" +	"<th>Category</th>" +"<th>Update</th><th>Remove</th></tr>";
+			output = "<table border='1'><tr><th>Product Code</th><th>Description</th>" + "<th>Quantity</th>" + "<th>Price</th>" +	"<th>Category</th>" +"</tr>";
 			
 			String query = "select * from product";
 			Statement stmt = con.createStatement();
@@ -90,7 +90,7 @@ public class store {
 				output += "<td>" + category + "</td>";
 				
 				// buttons
-				output += "<td><input name='btnUpdate' type='button' value='Update'class='btn btn-secondary'></td>"+ "<td><form method='post' action='store.jsp'>"+ "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"+ "<input name='pro_ID' type='hidden' value='" + pro_ID+ "'>" + "</form></td></tr>";
+				//output += "<td><input name='btnUpdate' type='button' value='Update'class='btn btn-secondary'></td>"+ "<td><form method='post' action='store.jsp'>"+ "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"+ "<input name='pro_ID' type='hidden' value='" + pro_ID+ "'>" + "</form></td></tr>";
 			}
 			con.close();
 			
