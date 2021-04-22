@@ -20,7 +20,7 @@ public class OrderService {
 	
 	OrderController orderObj = new OrderController(); 	
 	
-	//to read order
+	//to read all orders
 	@GET
 	@Path("/") 
 	@Produces(MediaType.TEXT_HTML) 
@@ -28,6 +28,13 @@ public class OrderService {
 		return orderObj.readOrder(); 
 	}
 	
+	//to read a paticular order by orderID
+	@GET
+	@Path("/{orderID}") 
+	@Produces(MediaType.TEXT_HTML) 
+	public String readOrderByID(@PathParam("orderID") String orderID) { 
+		return orderObj.readOrderByID(orderID); 
+	}
 	
 	//to insert order
 	@POST
