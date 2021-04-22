@@ -30,9 +30,10 @@ public String insertUser(@FormParam("userfirstName") String userfirstName,
 @FormParam("usercontactNumber") String usercontactNumber,
 @FormParam("useremail") String useremail,
 @FormParam("usergender") String usergender,
-@FormParam("userpassword") String userpassword)
+@FormParam("userpassword") String userpassword,
+@FormParam("usertype") String usertype)
 {
-String output = userObj.insertUser(userfirstName,userlastName, useraddress,usercontactNumber,useremail,usergender,userpassword);
+String output = userObj.insertUser(userfirstName,userlastName, useraddress,usercontactNumber,useremail,usergender,userpassword,usertype);
 return output;
 }
 @PUT
@@ -52,7 +53,8 @@ String usercontactNumber = userObject.get("usercontactNumber").getAsString();
 String useremail = userObject.get("useremail").getAsString();
 String usergender = userObject.get("usergender").getAsString();
 String userpassword = userObject.get("userpassword").getAsString();
-String output = userObj.updateUser(userID,userfirstName,userlastName,useraddress,usercontactNumber,useremail,usergender,userpassword);
+String usertype = userObject.get("usertype").getAsString();
+String output = userObj.updateUser(userID,userfirstName,userlastName,useraddress,usercontactNumber,useremail,usergender,userpassword,usertype);
 return output;
 }
 @DELETE
