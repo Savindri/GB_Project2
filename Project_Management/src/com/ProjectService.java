@@ -16,15 +16,28 @@ public class ProjectService {
 
 	Project projectObj = new Project();
 	
-	//read
-	@GET
-	@Path("/") 
-	@Produces(MediaType.TEXT_PLAIN) 
-	public String readProject() 
-	 { 
+	
+		//retrieve for researcher filter by the proposal ID
+		@GET
+		@Path("/{proposal_ID}") 
+		@Produces(MediaType.TEXT_HTML) 
+		public String readProjectID(@PathParam("proposal_ID") String ID) 
+		{ 
 	 	
-		return projectObj.readProject();
-	 } 
+			return projectObj.readProjectByID(ID);
+		}
+		
+		
+		//retrieve all projects for admin
+		@GET
+		@Path("/") 
+		@Produces(MediaType.TEXT_HTML) 
+		public String readProjects() 
+		{ 
+	 	
+			return projectObj.readProject();
+		}
+
 	
 	
 	//insert
@@ -71,12 +84,37 @@ public class ProjectService {
 	
 	
 	
-	//update
+	//update for reasercher
+//	@PUT
+//	@Path("/")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.TEXT_PLAIN)
+//	public String updateProject(String projectData) { 
+//		
+//		//Convert the input string to a JSON object 
+//		 JsonObject projectObject = new JsonParser().parse(projectData).getAsJsonObject(); 
+//		
+//		 //Read the values from the JSON object
+//		 String proposal_ID = projectObject.get("proposal_ID").getAsString(); 
+//		 String projectName = projectObject.get("projectName").getAsString(); 
+//		 String budget = projectObject.get("budget").getAsString();
+//		 String completionDate = projectObject.get("completionDate").getAsString();
+//		 String productCategory = projectObject.get("productCategory").getAsString();
+//		 String sellOrNot = projectObject.get("sellOrNot").getAsString();
+//		 String description = projectObject.get("description").getAsString();
+//		 String output = projectObj.updateProject(proposal_ID, projectName, budget, completionDate, productCategory, sellOrNot, description); 
+//		 return output; 
+//	
+//	}
+//	
+	
+	
+	//update status
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String updateProject(String projectData) { 
+	public String updateProjectManager(String projectData) { 
 		
 		//Convert the input string to a JSON object 
 		 JsonObject projectObject = new JsonParser().parse(projectData).getAsJsonObject(); 
@@ -89,7 +127,8 @@ public class ProjectService {
 		 String productCategory = projectObject.get("productCategory").getAsString();
 		 String sellOrNot = projectObject.get("sellOrNot").getAsString();
 		 String description = projectObject.get("description").getAsString();
-		 String output = projectObj.updateProject(proposal_ID, projectName, budget, completionDate, productCategory, sellOrNot, description); 
+		 String status = projectObject.get("status").getAsString();
+		 String output = projectObj.updateProjectManager(proposal_ID, projectName, budget, completionDate, productCategory, sellOrNot, description,status); 
 		 return output; 
 	
 	}
