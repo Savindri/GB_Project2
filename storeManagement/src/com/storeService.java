@@ -24,8 +24,17 @@ public class storeService {
 		@Produces(MediaType.TEXT_HTML) 
 		public String readStore()
 		{ 
-			return strObj.readProduct(); 
+			return strObj.readStore(); 
 		}
+//read operation only one product		
+		@GET
+		@Path("/{pro_ID}") 
+		@Produces(MediaType.TEXT_HTML) 
+		public String readOrderByID(@PathParam("pro_ID") String pro_ID)
+			{ 
+				return strObj.readOrderByID(pro_ID);
+			}
+		
 //insert operation
 		@POST
 		@Path("/product")
@@ -83,4 +92,16 @@ public class storeService {
 			
 			return output;
 		}
+//=======================read product details related to a specific product ID============================
+		@GET
+		@Path("price/{pro_ID}") 
+		@Produces(MediaType.TEXT_HTML) 	
+		public String readProduct(@PathParam("pro_ID") String pro_ID)
+		{ 
+			
+		 //String id = Integer.toString(pro_ID);
+			return strObj.readUnitPrice(pro_ID);
+		} 
+
+
 }

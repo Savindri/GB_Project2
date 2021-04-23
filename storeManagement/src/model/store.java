@@ -56,7 +56,7 @@ public class store {
 	return output;
 	}
 	//Read Method
-	public String readProduct()
+	public String readStore()
 	{
 		String output = "";
 		try
@@ -104,6 +104,54 @@ public class store {
 		}
 		return output;
 	}
+	
+	
+	//read one product
+	public String readOrderByID(String pro_ID) {
+		String output = "";
+		try
+		{
+			Connection con = connect();
+			if (con == null)
+			{return "Error while connecting to the database for reading."; }
+			
+			// Prepare the html table to be displayed
+			output = "<table border='1'><tr><th>Product Code</th><th>Description</th>" + "<th>Quantity</th>" + "<th>Price</th>" +	"<th>Category</th>" +"</tr>";
+			
+			String query = "select * from product p where p.pro_ID = '"+pro_ID+"'";
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			// iterate through the rows in the result set
+		while (rs.next())
+			{
+			String proID = Integer.toString(rs.getInt("pro_ID"));
+			String proCode = rs.getString("proCode");
+			String desc = rs.getString("desc");
+			String qty = Integer.toString(rs.getInt("qty"));
+			String price = Double.toString(rs.getDouble("price"));
+			String category = rs.getString("category");
+			
+			// Add into the html table
+			output += "<tr><td>" + proCode + "</td>";
+			output += "<td>" + desc + "</td>";
+			output += "<td>" + qty + "</td>";
+			output += "<td>" + price + "</td>";
+			output += "<td>" + category + "</td>";
+			}
+			con.close();
+			
+			// Complete the html table
+			output += "</table>";
+		}
+		catch (Exception e)
+		{
+			output = "Error while reading the products.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+		
+	}
+	
 	
 	//update method
 	public String updateProduct(String pro_ID, String proCode, String desc, String qty, String price, String category)
@@ -167,6 +215,43 @@ public class store {
 		catch (Exception e)
 		{
 			output = "Error while deleting the product.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
+//==========================to read price of a particular product======================================
+	public String readUnitPrice(String pro_ID){	 
+		String output = "";
+		//int id = Integer.parseInt(pro_ID);
+		
+		try{
+			 Connection con = connect();
+			 
+			if (con == null){
+				return "Error while connecting to the database for reading."; 
+			}
+					
+			//Query to execute
+			String query = "select price from product where pro_ID = '"+pro_ID+"'";
+			//creating the prepared statement
+			PreparedStatement preparedStmt = con.prepareStatement(query); 
+			//preparedStmt.setInt(1, Integer.parseInt(pro_ID));
+			
+			//Retrieving the values to a result set
+			ResultSet rs = preparedStmt.executeQuery(query);
+			
+			// iterate through the rows in the result set
+			while (rs.next()){
+				
+				String price = Double.toString(rs.getDouble("price"));				
+				output = price;				
+				
+			}
+			con.close();
+		}
+		catch (Exception e)
+		{
+			output = "Error while reading the product unit price.";
 			System.err.println(e.getMessage());
 		}
 		return output;
