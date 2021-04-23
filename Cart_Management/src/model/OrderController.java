@@ -11,7 +11,7 @@ public class OrderController {
 	
 	DBConnection dbObj = new DBConnection();
 	
-	
+	//============================================to insert delivery details to place an order==========================================
 	public String insertOrder(String date, String custName, String address, String phone, String email){ 
 		 String output = ""; 
 		 try{ 
@@ -67,7 +67,7 @@ public class OrderController {
 	}
 	
 	
-	//to read all orders
+	//==========================================to read all orders========================================================
 	public String readOrder(){ 
 		 String output = ""; 
 		 try{ 
@@ -141,7 +141,7 @@ public class OrderController {
 	 }
 	
 	
-	//Read order by particular orderID
+	//=============================================Read order by particular orderID=======================================================
 		public String readOrderByID(String oID){ 
 			 String output = ""; 
 			 try{ 
@@ -214,7 +214,7 @@ public class OrderController {
 			 return output; 
 		 }
 	
-	
+	//============================================to delete orders======================================================= 
 	public String deleteOrder(String orderID) { 
 		 String output = ""; 
 		 try{ 
@@ -239,7 +239,7 @@ public class OrderController {
 		 return output; 
 	 }
 	
-	
+	//================================================to update orders=============================================================================
 	public String updateOrder(String orderID, String date, String custName, String address, String phone, String email) {
     	String output = "";    	
     	try{

@@ -13,14 +13,14 @@ import org.jsoup.*;
 import org.jsoup.parser.*; 
 import org.jsoup.nodes.Document; 
 
-//To implement the RESTful API
+//====================================================To implement the RESTful API===============================================================
 
 @Path("/Order") 
 public class OrderService {
 	
 	OrderController orderObj = new OrderController(); 	
 	
-	//to read all orders
+	//===================================to read all orders====================================
 	@GET
 	@Path("/") 
 	@Produces(MediaType.TEXT_HTML) 
@@ -28,7 +28,7 @@ public class OrderService {
 		return orderObj.readOrder(); 
 	}
 	
-	//to read a paticular order by orderID
+	//==================================to read a paticular order by orderID====================
 	@GET
 	@Path("/{orderID}") 
 	@Produces(MediaType.TEXT_HTML) 
@@ -36,7 +36,7 @@ public class OrderService {
 		return orderObj.readOrderByID(orderID); 
 	}
 	
-	//to insert order
+	//=================================to insert order==========================================
 	@POST
 	@Path("/") 
 	//to specify the input type as form data
@@ -54,7 +54,7 @@ public class OrderService {
 	}
 	
 	
-	//to update order
+	//================================to update order==========================================
 	@PUT
 	@Path("/")
 	//accept the input as JSON
@@ -75,7 +75,7 @@ public class OrderService {
 	}
 	
 	
-	//to delete order
+	//================================to delete order=========================================
 	@DELETE
 	@Path("/")
 	//use XML for the input

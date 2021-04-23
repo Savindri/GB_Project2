@@ -22,7 +22,7 @@ public class CartService {
 		CartController cartObj = new CartController();
 	
 	
-		//to read cart
+		//=========================to read cart========================================================
 		@GET
 		@Path("/") 
 		@Produces(MediaType.TEXT_HTML) 
@@ -31,7 +31,7 @@ public class CartService {
 		}
 	
 	
-		//to insert into cart
+		//=======================to insert into cart===================================================
 		@POST
 		@Path("/") 
 		//to specify the input type as form data
@@ -49,7 +49,7 @@ public class CartService {
 		}
 	
 	
-		//to update cart
+		//============================to update cart====================================
 		@PUT
 		@Path("/")
 		//accept the input as JSON
@@ -68,7 +68,7 @@ public class CartService {
 		}
 	
 	
-		//to delete items from cart
+		//========================to delete items from cart============================
 		@DELETE
 		@Path("/")
 		//use XML for the input
