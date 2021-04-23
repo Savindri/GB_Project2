@@ -35,7 +35,7 @@ public class CartController {
 			 	//To get the unit price from product table in store service
 				Client client = new Client();
 				//web resource to access the specified URL
-				WebResource resource = client.resource("http://localhost:8080/storeManagement_/product/Test/"+pro_ID);			
+				WebResource resource = client.resource("http://localhost:8080/storeManagement_/StoreManagement/pro/price/"+pro_ID);			
 				//To capture the returning value
 				String response = resource.type(MediaType.TEXT_PLAIN).get(String.class);
 			 
@@ -161,7 +161,7 @@ public class CartController {
     		//To get the unit price from product table in store service
 			Client client = new Client();
 			//web resource to access the specified URL
-			WebResource resource = client.resource("http://localhost:8080/storeManagement_/product/Test/"+pro_ID);			
+			WebResource resource = client.resource("http://localhost:8080/storeManagement_/StoreManagement/pro/price/"+pro_ID);			
 			//To capture the returning value
 			String response = resource.type(MediaType.TEXT_PLAIN).get(String.class);
 			
