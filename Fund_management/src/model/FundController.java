@@ -3,18 +3,16 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 import java.util.Date;
 
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.header.AcceptableMediaType;
+
 
 import util.DBConnect;
 
@@ -68,10 +66,11 @@ public class FundController {
 			
 			con.close();
 			
-			output = " ============= Details inserted successfully =============" +Fund_duration;
+			output = " ============= Details inserted successfully =============";
 			
 			 }catch(Exception e) {
-				 e.printStackTrace();				 			 
+				 e.printStackTrace();	
+				 output = " ============= Error While Inserting the Data =============";
 			 }
 			
 				 return output; 		

@@ -1,15 +1,13 @@
 package com;
 
 
+import javax.annotation.security.RolesAllowed;
 //For REST Service
 import javax.ws.rs.*; 
 import javax.ws.rs.core.MediaType;
 
 //For JSON
 import com.google.gson.*;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-
 import model.FundController;
 
 //For XML
@@ -26,8 +24,14 @@ public class FundService {
 //Creating a Object From Controller class
 FundController fundC = new FundController();
 
-
-
+@RolesAllowed({"admin"})
+@GET
+@Path("/secured") 
+@Produces(MediaType.TEXT_HTML) 	
+public String readF() { 
+	
+		return "Access granted";
+	}
 
 
 // =================== Client Fund insertion =====================//
@@ -72,6 +76,7 @@ public String UpdateClintFundDetails(String Funddate) {
 }
 
 //===================Retriving Fund Details  =====================//
+    @RolesAllowed({"admin"})
 	@GET
 	@Path("/") 
 	@Produces(MediaType.TEXT_HTML) 	
@@ -79,7 +84,8 @@ public String UpdateClintFundDetails(String Funddate) {
 		
 			return fundC.readFundDetails();
 		}
-	//=================== Retriving particular Fund Details  =====================//	
+    
+//=================== Retriving particular Fund Details  =====================//	
 	@GET
 	@Path("/{FundID}") 
 	@Produces(MediaType.TEXT_HTML) 	
