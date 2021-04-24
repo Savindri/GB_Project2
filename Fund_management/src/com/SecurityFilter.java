@@ -100,7 +100,19 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 					if (rolesSet.contains("admin")) {
 						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
 								.path("auth/auths");
+						
+						
+						Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
 
+						Response response = invocationBuilder.get();
+
+						// disallow access to improper URL
+						if (response.getStatus() != 200) {
+							Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
+									.entity("Unauthorized user..Access denied").build();
+							requestContext.abortWith(unauthoriazedStatus);
+
+						}
 					}
 
 					return;
