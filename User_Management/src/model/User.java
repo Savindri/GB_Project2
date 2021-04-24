@@ -129,7 +129,7 @@ preparedStmt.setString(4, contactNumber);
 preparedStmt.setString(5, email);
 preparedStmt.setString(6, gender);
 preparedStmt.setString(7, password);
-preparedStmt.setString(8, type);
+preparedStmt.setString(8, type );
 preparedStmt.setInt(9, Integer.parseInt(ID));
 // execute the statement
 preparedStmt.execute();
