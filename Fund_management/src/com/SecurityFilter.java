@@ -87,10 +87,10 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 
 					//Checking for a valid user
 					ClientConfig clientConfig = new ClientConfig();
+					
 					// authentication information is get h HTTP request
 					HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
 					clientConfig.register(feature);
-
 					clientConfig.register(JacksonFeature.class);
 
 					Client client = ClientBuilder.newClient(clientConfig);
