@@ -59,7 +59,7 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 			 
 			if (authHeader != null && authHeader.size() > 0) {
 				
-				//Accesing the 
+				//Accessing the URL HEader to get the authentication details
 				String authToken = authHeader.get(0);
 				authToken = authToken.replaceFirst(AUTHENTICATION_HEADER_PREFIX, "");
 
