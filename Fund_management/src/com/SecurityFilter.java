@@ -94,8 +94,14 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 					clientConfig.register(JacksonFeature.class);
 
 					Client client = ClientBuilder.newClient(clientConfig);
-					WebTarget webTarget = null;
-					
+					WebTarget webTarget = null;					
+
+					//Checking the return value is equal to the user type when access the user management service
+					if (rolesSet.contains("admin")) {
+						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
+								.path("auth/auths");
+
+					}
 
 					return;
 				}
