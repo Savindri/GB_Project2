@@ -50,6 +50,53 @@ public class SecurityFilter implements ContainerRequestFilter {
 		//Checking the annotation is denied all
 		if (!method.isAnnotationPresent(PermitAll.class)) {
 			
+if (method.isAnnotationPresent(DenyAll.class)) {
+				
+				//The request has not been applied because it lacks valid authentication credentials for the target resource.
+				Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED).entity(" Status 1 - Access denied").build();									
+				requestContext.abortWith(unauthoriazedStatus);
+			}
+			 
+			if (authHeader != null && authHeader.size() > 0) {
+				
+				//Accesing the 
+				String authToken = authHeader.get(0);
+				authToken = authToken.replaceFirst(AUTHENTICATION_HEADER_PREFIX, "");
+
+				String decodedString = "";
+				
+				try {
+					//Get the user name and password by splitting the decoded byte
+					byte[] decodedBytes = Base64.getDecoder().decode(authToken);
+					//Converting the decoded byte into  decoded string
+					decodedString = new String(decodedBytes, "UTF-8");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				//Get the userName and password as user inputs for decoding process
+				final StringTokenizer tokenizer = new StringTokenizer(decodedString, ":");
+				
+				final String username = tokenizer.nextToken();
+				final String password = tokenizer.nextToken();
+				
+				if (method.isAnnotationPresent(RolesAllowed.class)) {
+					
+					//Get the allowed user roles from Annotation
+					RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
+					Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
+
+					
+
+					return;
+				}
+
+			}
+		}
+		// disallow access to improper URLs
+		Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
+				.entity("Status 3 - Access denied").build();
+		requestContext.abortWith(unauthoriazedStatus);
+
 		
 		
 	}
