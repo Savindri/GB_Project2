@@ -44,8 +44,17 @@ public class SecurityFilter implements ContainerRequestFilter {
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		// TODO Auto-generated method stub
 		
+		List<String> authHeader = requestContext.getHeaders().get(AUTHENTICATION_HEADER_KEY);
+		Method method = resourceInfo.getResourceMethod();
+
+		//Checking the annotation is denied all
+		if (!method.isAnnotationPresent(PermitAll.class)) {
+			
 		
+		
+	}
 }
+
 
 
 
