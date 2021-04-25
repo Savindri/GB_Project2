@@ -1,7 +1,6 @@
 package com;
 import model.User;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 //For REST Service
            import javax.ws.rs.*;
@@ -23,7 +22,7 @@ public class UserDetails{
 			
 			@RolesAllowed({"admin"})
 			@GET
-			@Path("/auths")
+			@Path("/admin")
 			@Produces(MediaType.TEXT_PLAIN)
 			public boolean readadmin() {
 					
@@ -41,7 +40,7 @@ public class UserDetails{
 			
 			@RolesAllowed({"Researcher"})
 			@GET
-			@Path("/buyer")
+			@Path("/Researcher")
 			@Produces(MediaType.TEXT_PLAIN)
 			public boolean readresearcher() {
 				return true;
@@ -60,7 +59,7 @@ public class UserDetails{
 	          }
 
             //Add insertuser for the Table
-			@PermitAll
+			@RolesAllowed({"admin","buyer","Researcher"})
             @POST
             @Path("/")
             @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -110,7 +109,7 @@ return output;
             }
 
             //Delete User for Specific userID
-			@PermitAll
+			@RolesAllowed({"admin","buyer","Researcher"})
             @DELETE
             @Path("/")
             @Consumes(MediaType.APPLICATION_XML)
