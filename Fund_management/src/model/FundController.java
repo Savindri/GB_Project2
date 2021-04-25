@@ -20,15 +20,19 @@ public class FundController {
 	
 	//======================== Client Fund Requesting Method ============================= //
 	
-	 public String insertClientFund(String Fund_duration ,String ProjectID) {
+	 public String insertClientFund(String Fund_duration ,String ProjectID ) {
 			
 			String output = "";
 			//int id = Integer.parseInt(ProjectID);
 			
 			//checking the null value insertion
-			if(Fund_duration.equals("")) {
+			if(Fund_duration.isEmpty()) {
 				
-				return "You need to enter Duration";				
+				return "You need to enter Duration";	
+				
+			}else if(ProjectID.isEmpty()) {
+				
+				return "You need to enter ProjectID";		
 			}
 						
 			try{ 
@@ -36,7 +40,9 @@ public class FundController {
 		     Connection con = DBConnect.connect();
 			
 			if (con == null) {
+				
 				return"Error while connecting to the database for inserting."; 
+				
 				} 
 			
 			  String query = "insert into fund (FundID,ProjectID,F_Duration,Fund_amount)"
@@ -87,25 +93,27 @@ public class FundController {
 	 		
 	 		return "Field FundID cannot be 0";	
 	 		
-	 	}else if( Fund_duration.equals("") ) {
+	 	}else if( Fund_duration.isEmpty()) {
 	 		
 	 		return "Duration cannot be empty";
 	 		
-	 	}else if(Amount.equals("")) {
+	 	}else if(Amount.isEmpty()) {
 	 		
 	 		return "Amount cannot be empty";
 	 	}
 	 	
 	 	 	
+	 	
 	 	try{ 
-			 		//Testing database connection
-			 		 Connection con = DBConnect.connect();
+			 	//Testing database connection
+			 	Connection con = DBConnect.connect();
 			 	
 			 	if (con == null) {
 			 		
 			 		return"Error while connecting to the database for updating.";
 			 		
-			 		} 
+			 	} 
+			 	
 			 	//Query to execute
 			 	String query = "UPDATE fund SET  F_Duration = ? ,D_modified_date = ? ,Fund_amount = ? Where FundID = ? ";
 			     
@@ -129,6 +137,7 @@ public class FundController {
 			 	output = "================ Fund Details Updated successfully ================";
 	 	
 	 	}catch (Exception e) { 
+	 		
 		 		output = "Error while updating the Details...Fund ID = '"+fundid+"'";
 		 		System.err.println(e.getMessage()); 
 	 		
@@ -140,7 +149,7 @@ public class FundController {
 	
 	//============================= Admin Updating the Fund Details ===========================// 
 		
-	 public String updateItem(int fundid , String Fund_announcement , String Fund_duration,String instructions , String Amount)
+	 public String UpdateFund(int fundid , String Fund_announcement , String Fund_duration,String instructions , String Amount)
 	 { 
 	 	String output = "";
 	 	
@@ -149,23 +158,23 @@ public class FundController {
 	 		
 	 		return "Field ProjectID cannot be 0";	
 	 		
-	 	}else if( Fund_announcement.equals("") ) {
+	 	}else if( Fund_announcement.isEmpty() ) {
 	 		
 	 		return "Announcement cannot be empty";
 	 		
-	 	}else if(Fund_duration.equals("") ) {
+	 	}else if(Fund_duration.isEmpty() ) {
 	 		
 	 		return "Fund_duration cannot be empty";
 	 		
-	 	}else if(instructions.equals("") ) {
+	 	}else if(instructions.isEmpty() ) {
 	 		
 	 		return "instructions cannot be empty";
 	 	}
 	 	
 	 	 	
 	 	try{ 
-			 		//Testing database connection
-			 		 Connection con = DBConnect.connect();
+			 	//Testing database connection
+			 	 Connection con = DBConnect.connect();
 			 	
 			 	if (con == null) {
 			 		
@@ -219,7 +228,8 @@ public class FundController {
 				 
 			if (con == null)
 			{
-				return "Error while connecting to the database for reading."; }
+				return "Error while connecting to the database for reading.";
+			}
 			
 			// Prepare the html table to be displayed
 			output = "<table border='1'><tr>"
@@ -387,35 +397,6 @@ public class FundController {
 				
 		}		
 			
-	public String retval(String ID) {
-		
-		String output = "";
-		
-		try {
-			
-			 Connection con = DBConnect.connect();
-			if (con == null) {
-				return "Error while connecting to the database for deleting.";
-			}
-			// create a prepared statement
-			String query = "SELECT budget FROM project_proposals Where proposal_ID = '"+ID+"' ";
-			
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			
-			ResultSet rs = preparedStmt.executeQuery(query);
-			while (rs.next())
-			{
-				String Budget = Double.toString(rs.getDouble("budget"));
-				return (Budget);
-			}
-			preparedStmt.execute();
-			con.close();
-			
-		} catch (Exception e) {
-			
-			System.err.println(e.getMessage());
-		}
-		return output;
-	}
+//	
 
 }

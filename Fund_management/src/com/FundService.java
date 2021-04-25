@@ -1,6 +1,7 @@
 package com;
 
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 //For REST Service
 import javax.ws.rs.*; 
@@ -24,18 +25,18 @@ public class FundService {
 //Creating a Object From Controller class
 FundController fundC = new FundController();
 
-@RolesAllowed({"admin"})
-@GET
-@Path("/secured") 
-@Produces(MediaType.TEXT_HTML) 	
-public String readF() { 
-	
-		return "Access granted";
-	}
+//@RolesAllowed({"admin"})
+//	@GET
+//	@Path("/admin/ss") 
+//	@Produces(MediaType.TEXT_HTML) 	
+//	public String read() { 
+//		
+//			return "Access granted";
+//		}
 
 
 // =================== Client Fund insertion =====================//
-
+@RolesAllowed({"researcher"})
 @POST
 @Path("/Client")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -52,7 +53,7 @@ public String AddNewFund(@FormParam("Duration") String Duration,
 	}
 
 //=================== Client Fund Updation =====================//
-
+@RolesAllowed({"researcher"})
 @PUT
 @Path("/Client")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -78,7 +79,7 @@ public String UpdateClintFundDetails(String Funddate) {
 //===================Retriving Fund Details  =====================//
     @RolesAllowed({"admin"})
 	@GET
-	@Path("/") 
+	@Path("/admin") 
 	@Produces(MediaType.TEXT_HTML) 	
 	public String readFunddetails() { 
 		
@@ -86,8 +87,9 @@ public String UpdateClintFundDetails(String Funddate) {
 		}
     
 //=================== Retriving particular Fund Details  =====================//	
-	@GET
-	@Path("/{FundID}") 
+    @RolesAllowed({"researcher"})
+    @GET
+	@Path("/Client/{FundID}") 
 	@Produces(MediaType.TEXT_HTML) 	
 	public String readFunddetailss(@PathParam("FundID") String ID) { 
 				
@@ -96,9 +98,9 @@ public String UpdateClintFundDetails(String Funddate) {
 			} 
 	
 //=================== Admin Update Fund Details  =====================//	
-
+    @RolesAllowed({"admin"})
 	@PUT
-	@Path("/")
+	@Path("/admin")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN) 
 	//Getting the Fund details from the xml to Update
@@ -115,16 +117,17 @@ public String UpdateClintFundDetails(String Funddate) {
 		String Amount = FundObject.get("Fund_amount").getAsString();
 		
 		//Passing values to the controller class       
-		String output = fundC.updateItem(FundID1, Fund_announcement, Fund_duration, instructions,Amount); 
+		String output = fundC.UpdateFund(FundID1, Fund_announcement, Fund_duration, instructions,Amount);
+		
 		return output;
 		
 		
 	}
 	
 	//=================== Deleting particular Fund  =====================//	
-	
+    @RolesAllowed({"researcher"})
 	@DELETE
-	@Path("/")
+	@Path("/Client")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String DeleteFundDetails(String FundData)

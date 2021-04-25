@@ -87,10 +87,10 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 
 					//Checking for a valid user
 					ClientConfig clientConfig = new ClientConfig();
+					
 					// authentication information is get h HTTP request
 					HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
 					clientConfig.register(feature);
-
 					clientConfig.register(JacksonFeature.class);
 
 					Client client = ClientBuilder.newClient(clientConfig);
@@ -99,9 +99,12 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 					//Checking the return value is equal to the user type when access the user management service
 					if (rolesSet.contains("admin")) {
 						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
-								.path("auth/auths");
+								.path("auth/admin");
+					}else if (rolesSet.contains("researcher")) {
+						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
+								.path("auth/researcher");
 						
-						
+						//get the response from web target
 						Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
 
 						Response response = invocationBuilder.get();
@@ -109,7 +112,7 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 						// disallow access to improper URL
 						if (response.getStatus() != 200) {
 							Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
-									.entity("Unauthorized user..Access denied").build();
+									.entity("Unauthorized user..Access denied_1").build();
 							requestContext.abortWith(unauthoriazedStatus);
 
 						}
@@ -129,32 +132,3 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 		
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
