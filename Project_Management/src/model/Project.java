@@ -12,7 +12,7 @@ public class Project {
 	
 	//----------------------------- Researcher project insert -------------------------------------------------------------------------------
 	
-	public String insertProject(String projectName, String budget, String completionDate, String productCategory, String sellOrNot, String description) { 
+	public String insertProject(String projectName, String budget, String completionDate, String productCategory, String sellOrNot, String description, String userID) { 
 	 
 		String output = ""; 
 	 
@@ -24,7 +24,7 @@ public class Project {
 				return "Error while connecting to the database for inserting."; 
 			} 
 		
-		String query = " insert into project_proposals (`proposal_ID`,`projectName`,`budget`,`completionDate`,`productCategory`,`sellOrNot`,`description`)"+ " values (?, ?, ?, ?, ?, ?, ?)"; 
+		String query = " insert into project_proposals (`proposal_ID`,`projectName`,`budget`,`completionDate`,`productCategory`,`sellOrNot`,`description`,`userID`)"+ " values (?, ?, ?, ?, ?, ?, ?, ?)"; 
 	 
 		PreparedStatement preparedStmt = con.prepareStatement(query); 
 	
@@ -36,6 +36,7 @@ public class Project {
 		preparedStmt.setString(5, productCategory); 
 		preparedStmt.setString(6, sellOrNot);
 		preparedStmt.setString(7, description);
+		preparedStmt.setString(8, userID);
 	
 		// execute the statement3
 		preparedStmt.execute(); 
@@ -82,6 +83,7 @@ public class Project {
 					+"<th>Sell Or Not</th>" 
 					+"<th>Description</th>" 
 					+"<th>status</th>"
+					+"<th>userID</th>"
 					+"<th>Update</th>"
 					+ "<th>Remove</th>"
 					+ "</tr>"; 
@@ -102,6 +104,7 @@ public class Project {
 				 String sellOrNot = rs.getString("sellOrNot");
 				 String description = rs.getString("description");
 				 String status = rs.getString("status");
+				 String userID = rs.getString("userID");
 				 
 				 // Add into the html table
 				 output += "<tr><td>" + proposal_ID + "</td>"; 
@@ -112,6 +115,7 @@ public class Project {
 				 output += "<td>" + sellOrNot + "</td>"; 
 				 output += "<td>" + description + "</td>"; 
 				 output += "<td>" + status + "</td>";
+				 output += "<td>" + userID + "</td>";
 				 
 				 // buttons
 				 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-secondary'></td>"
@@ -160,7 +164,8 @@ public class Project {
 					+"<th>Completion Date</th>" 
 					+"<th>Product Category</th>" 
 					+"<th>Sell Or Not</th>" 
-					+"<th>Description</th>" 
+					+"<th>Description</th>"
+					+"<th>userID</th>"
 					+"<th>Update</th>"
 					+ "<th>Remove</th>"
 					+ "</tr>"; 
@@ -180,6 +185,7 @@ public class Project {
 				 String productCategory = rs.getString("productCategory"); 
 				 String sellOrNot = rs.getString("sellOrNot");
 				 String description = rs.getString("description");
+				 String userID = rs.getString("userID");
 				 
 				 // Add into the html table
 				 output += "<tr><td>" + proposal_ID + "</td>"; 
@@ -189,6 +195,7 @@ public class Project {
 				 output += "<td>" + productCategory + "</td>"; 
 				 output += "<td>" + sellOrNot + "</td>"; 
 				 output += "<td>" + description + "</td>"; 
+				 output += "<td>" + userID + "</td>";
 				 
 				 // buttons
 				 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-secondary'></td>"
@@ -245,13 +252,13 @@ public class Project {
 			preparedStmt.execute(); 
 			con.close(); 
 		 
-			output = "Project status updated successfully"; 
+			output = "Project updated successfully"; 
 		 
 		} 
 		catch (Exception e) 
 		{ 
 		 
-			output = "Error while updating the item."; 
+			output = "Error while updating the project."; 
 		 
 			System.err.println(e.getMessage()); 
 			System.out.print(e);
@@ -295,13 +302,47 @@ public class Project {
 		} 
 		catch (Exception e) 
 		{ 
-			output = "Error while deleting the item."; 
+			output = "Error while deleting the project."; 
 			System.err.println(e.getMessage()); 
 			System.out.print(e);
 		} 
 	 
 		return output; 
 	 }
+	
+	
+	public String retval(String ID) {
+		
+		String output = "";
+		
+		try {
+			
+			Connection con =  obj.connect();
+			
+			
+			if (con == null) {
+				return "Error while connecting to the database for deleting.";
+			}
+			// create a prepared statement
+			String query = "SELECT budget FROM project_proposals Where proposal_ID = '"+ID+"' ";
+			
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			
+			ResultSet rs = preparedStmt.executeQuery(query);
+			while (rs.next())
+			{
+				String Budget = Double.toString(rs.getDouble("budget"));
+				return (Budget);
+			}
+			preparedStmt.execute();
+			con.close();
+			
+		} catch (Exception e) {
+			
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
 	
 	
 //	public String updateProject(String proposal_ID, String projectName, String budget, String completionDate, String productCategory, String sellOrNot, String description){ 
