@@ -98,11 +98,11 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 
 					//Checking the return value is equal to the user type when access the user management service
 					if (rolesSet.contains("admin")) {
-						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
+						webTarget = client.target("http://localhost:8090/User_Management/myService")
 								.path("auth/auths");
 					}else if (rolesSet.contains("Researcher")) {
-						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
-								.path("auth/researcher");
+						webTarget = client.target("http://localhost:8090/User_Management/myService")
+								.path("Users/researcher");
 						
 						//get the response from web target
 						Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
