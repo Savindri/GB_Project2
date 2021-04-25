@@ -245,13 +245,13 @@ public class Project {
 			preparedStmt.execute(); 
 			con.close(); 
 		 
-			output = "Project status updated successfully"; 
+			output = "Project updated successfully"; 
 		 
 		} 
 		catch (Exception e) 
 		{ 
 		 
-			output = "Error while updating the item."; 
+			output = "Error while updating the project."; 
 		 
 			System.err.println(e.getMessage()); 
 			System.out.print(e);
@@ -295,13 +295,47 @@ public class Project {
 		} 
 		catch (Exception e) 
 		{ 
-			output = "Error while deleting the item."; 
+			output = "Error while deleting the project."; 
 			System.err.println(e.getMessage()); 
 			System.out.print(e);
 		} 
 	 
 		return output; 
 	 }
+	
+	
+	public String retval(String ID) {
+		
+		String output = "";
+		
+		try {
+			
+			Connection con =  obj.connect();
+			
+			
+			if (con == null) {
+				return "Error while connecting to the database for deleting.";
+			}
+			// create a prepared statement
+			String query = "SELECT budget FROM project_proposals Where proposal_ID = '"+ID+"' ";
+			
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			
+			ResultSet rs = preparedStmt.executeQuery(query);
+			while (rs.next())
+			{
+				String Budget = Double.toString(rs.getDouble("budget"));
+				return (Budget);
+			}
+			preparedStmt.execute();
+			con.close();
+			
+		} catch (Exception e) {
+			
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
 	
 	
 //	public String updateProject(String proposal_ID, String projectName, String budget, String completionDate, String productCategory, String sellOrNot, String description){ 
