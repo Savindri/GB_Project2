@@ -35,7 +35,7 @@ public String readF() {
 
 
 // =================== Client Fund insertion =====================//
-
+@RolesAllowed({"admin","researcher"})
 @POST
 @Path("/Client")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -52,7 +52,7 @@ public String AddNewFund(@FormParam("Duration") String Duration,
 	}
 
 //=================== Client Fund Updation =====================//
-
+@RolesAllowed({"researcher"})
 @PUT
 @Path("/Client")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -76,7 +76,7 @@ public String UpdateClintFundDetails(String Funddate) {
 }
 
 //===================Retriving Fund Details  =====================//
-    @RolesAllowed({"admin"})
+    @RolesAllowed({"buyer"})
 	@GET
 	@Path("/") 
 	@Produces(MediaType.TEXT_HTML) 	
@@ -86,7 +86,8 @@ public String UpdateClintFundDetails(String Funddate) {
 		}
     
 //=================== Retriving particular Fund Details  =====================//	
-	@GET
+    @RolesAllowed({"researcher"})
+    @GET
 	@Path("/{FundID}") 
 	@Produces(MediaType.TEXT_HTML) 	
 	public String readFunddetailss(@PathParam("FundID") String ID) { 
@@ -96,7 +97,7 @@ public String UpdateClintFundDetails(String Funddate) {
 			} 
 	
 //=================== Admin Update Fund Details  =====================//	
-
+    @RolesAllowed({"admin"})
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -122,7 +123,7 @@ public String UpdateClintFundDetails(String Funddate) {
 	}
 	
 	//=================== Deleting particular Fund  =====================//	
-	
+    @RolesAllowed({"admin","researcher"})
 	@DELETE
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_XML)

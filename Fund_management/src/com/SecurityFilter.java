@@ -99,9 +99,14 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 					//Checking the return value is equal to the user type when access the user management service
 					if (rolesSet.contains("admin")) {
 						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
-								.path("auth/auths");
-						
-						
+								.path("auth/admin");
+					}else if (rolesSet.contains("buyer")) {
+						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
+								.path("auth/buyer");
+					}else {
+						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
+								.path("auth/Researcher");
+						//get the response from web target
 						Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
 
 						Response response = invocationBuilder.get();
@@ -111,7 +116,6 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 							Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
 									.entity("Unauthorized user..Access denied").build();
 							requestContext.abortWith(unauthoriazedStatus);
-
 						}
 					}
 
@@ -123,38 +127,6 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 		// disallow access to improper URLs
 		Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
 				.entity("Status 3 - Access denied").build();
-		requestContext.abortWith(unauthoriazedStatus);
-
-		
-		
+		requestContext.abortWith(unauthoriazedStatus);				
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
