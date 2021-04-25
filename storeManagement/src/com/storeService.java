@@ -1,6 +1,7 @@
 package com;
 
-import model.store; 
+import model.store;
+import javax.annotation.security.RolesAllowed;
 
 //For REST Service
 import javax.ws.rs.*; 
@@ -18,7 +19,8 @@ import org.jsoup.nodes.Document;
 @Path("/pro")
 public class storeService {
 	store strObj = new store(); 
-//read operation		
+//read operation========================================================================================
+		@RolesAllowed({"admin"})
 		@GET
 		@Path("/product") 
 		@Produces(MediaType.TEXT_HTML) 
@@ -26,7 +28,7 @@ public class storeService {
 		{ 
 			return strObj.readStore(); 
 		}
-//read operation only one product		
+//read product by product id============================================================================		
 		@GET
 		@Path("/{pro_ID}") 
 		@Produces(MediaType.TEXT_HTML) 
@@ -35,7 +37,7 @@ public class storeService {
 				return strObj.readOrderByID(pro_ID);
 			}
 		
-//insert operation
+//insert operation======================================================================================
 		@POST
 		@Path("/product")
 		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -50,7 +52,7 @@ public class storeService {
 			return output;
 		}
 		
-//update operation
+//update operation=====================================================================================
 		@PUT
 		@Path("/product")
 		@Consumes(MediaType.APPLICATION_JSON)
@@ -74,7 +76,7 @@ public class storeService {
 			return output;
 		}
 		
-//delete operation
+//delete operation====================================================================================
 		@DELETE
 		@Path("/product")
 		@Consumes(MediaType.APPLICATION_XML)
@@ -92,7 +94,7 @@ public class storeService {
 			
 			return output;
 		}
-//=======================read product details related to a specific product ID============================
+//read product price related to a specific product ID================================================
 		@GET
 		@Path("price/{pro_ID}") 
 		@Produces(MediaType.TEXT_HTML) 	
@@ -102,6 +104,5 @@ public class storeService {
 		 //String id = Integer.toString(pro_ID);
 			return strObj.readUnitPrice(pro_ID);
 		} 
-
-
+		
 }
