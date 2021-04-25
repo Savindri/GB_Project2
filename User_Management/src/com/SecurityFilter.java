@@ -33,15 +33,15 @@ public class SecurityFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		// TODO Auto-generated method stub
 		
+		// TODO Auto-generated method stub
 		List<String> authHeader = requestContext.getHeaders().get(AUTHENTICATION_HEADER_KEY);
 		
 		Method method = resourceInfo.getResourceMethod();
 		
 		 if( ! method.isAnnotationPresent(PermitAll.class))
 	        {
-			//Access denied for all
+			    //Access denied for All
 	            if(method.isAnnotationPresent(DenyAll.class))
 	            {
 	            	Response unauthoriazedStatus = Response
@@ -51,7 +51,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 	            		requestContext.abortWith(unauthoriazedStatus);
 	            		
 	            }
-	            
+	    //implement the security filter method        
 		if(authHeader != null && authHeader.size() > 0 ) {
 			
 			String authToken = authHeader.get(0);
@@ -105,6 +105,6 @@ public class SecurityFilter implements ContainerRequestFilter {
 											.build(); 
 		requestContext.abortWith(unauthoriazedStatus);
 	        
-	}
+	  }
 
 }
