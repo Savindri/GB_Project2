@@ -5,9 +5,8 @@ import java.sql.*;
 
 public class OrderController {
 	
-	int quantity;
+	int quantity,foreignKey,foreignKey2;
 	double unitPrice;
-	int foreignKey;
 	
 	DBConnection dbObj = new DBConnection();
 	
@@ -20,8 +19,8 @@ public class OrderController {
 				 return "Error while connecting to the database for inserting."; 
 			 } 
 			 // create a prepared statement
-			 String query = "insert into order_(`orderID`,`cartID`,`date`,`custName`,`address`,`phone`,`email`,`total`)"
-					 			+ " values (?, ?, ?, ?, ?, ?, ?, ?)";	
+			 String query = "insert into order_(`orderID`,`cartID`,`uID`,`date`,`custName`,`address`,`phone`,`email`,`total`)"
+			 			+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";	
 			 	
 			 	//calculate total amount
 			 	String query2 = "select quantity , unitPrice from cart order by cartID desc limit 1";
@@ -43,21 +42,32 @@ public class OrderController {
 				}
 				String cartID = Integer.toString(foreignKey);
 				preparedStmt3.execute();
+				
+				//to get uID as foreign key
+			 	String query4 = "select uID from cart order by cartID desc limit 1";
+				PreparedStatement preparedStmt4 = con.prepareStatement(query4); 
+				ResultSet rs4 = preparedStmt4.executeQuery(query4);
+				while (rs4.next()){
+					foreignKey2 = rs4.getInt("uID");
+				}
+				String uID = Integer.toString(foreignKey2);
+				preparedStmt4.execute();
 			
-			 PreparedStatement preparedStmt = con.prepareStatement(query);
-			 // binding values
-			 preparedStmt.setInt(1, 0);
-			 preparedStmt.setString(2, cartID);
-			 preparedStmt.setString(3, date); 
-			 preparedStmt.setString(4, custName);
-			 preparedStmt.setString(5, address);
-			 preparedStmt.setInt(6, Integer.parseInt(phone));
-			 preparedStmt.setString(7, email);
-			 preparedStmt.setString(8, total);
-			 // execute the statement
-			 preparedStmt.execute();
-			 con.close(); 
-			 output = "Order Inserted successfully!"; 
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				 // binding values
+				 preparedStmt.setInt(1, 0);
+				 preparedStmt.setString(2, cartID);
+				 preparedStmt.setString(3, uID);
+				 preparedStmt.setString(4, date); 
+				 preparedStmt.setString(5, custName);
+				 preparedStmt.setString(6, address);
+				 preparedStmt.setInt(7, Integer.parseInt(phone));
+				 preparedStmt.setString(8, email);
+				 preparedStmt.setString(9, total);
+				 // execute the statement
+				 preparedStmt.execute();
+				 con.close(); 
+				 output = "Order Inserted successfully!"; 
 		 } 
 		 catch (Exception e) { 
 			 output = "Error while inserting the order!"; 
@@ -80,14 +90,13 @@ public class OrderController {
 			 			+ "<tr>"
 			 			+ "<th>orderID</th>"
 			 			+ "<th>cartID</th>"
+			 			+ "<th>uID</th>"
 			 			+ "<th>Date</th>" 
 			 			+ "<th>Customer Name</th>"
 			 			+ "<th>Address</th>"
 			 			+ "<th>Phone</th>"
 			 			+ "<th>Email</th>"
 			 			+ "<th>Total Amount (Rs.)</th>"
-			 			+ "<th>Update</th>"
-						+ "<th>Remove</th>"
 			 			+ "</tr>"; 
 			 
 			 String query = "select * from order_";
@@ -97,6 +106,7 @@ public class OrderController {
 			 while (rs.next()) { 
 				 String orderID = Integer.toString(rs.getInt("orderID"));
 				 String cartID = Integer.toString(rs.getInt("cartID"));
+				 String uID = Integer.toString(rs.getInt("uID"));
 				 String date = rs.getString("date");
 				 String custName = rs.getString("custName");
 				 String address = rs.getString("address");
@@ -106,6 +116,68 @@ public class OrderController {
 				 //  Add a row into the html table
 				 output += "<td>" + orderID + "</td>";
 				 output += "<td>" + cartID + "</td>";
+				 output += "<td>" + uID + "</td>";
+				 output += "<td>" + date + "</td>";
+				 output += "<td>" + custName + "</td>";
+				 output += "<td>" + address + "</td>";
+				 output += "<td>" + phone + "</td>";
+				 output += "<td>" + email + "</td>";
+				 output += "<td>" + total + "</td></tr>";				 
+			 } 
+			 con.close(); 
+			 // Complete the html table
+			 output += "</table>"; 
+		 } 
+		 catch (Exception e) { 
+			 output = "Error while reading order!"; 
+			 System.err.println(e.getMessage()); 
+		 } 
+		 return output; 
+	 }
+	
+	
+	//=============================================Read order by particular orderID=======================================================
+	public String readOrderByOrderID(String oID){ 
+		 String output = ""; 
+		 try{ 
+			 Connection con = dbObj.connect(); 
+			 if (con == null) {
+				 return "Error while connecting to the database for reading particular order!"; 
+			 } 
+			 // Prepare the html table to be displayed
+			 output = "<table border='1'>"
+			 			+ "<tr>"
+			 			+ "<th>orderID</th>"
+			 			+ "<th>cartID</th>"
+			 			+ "<th>uID</th>"
+			 			+ "<th>Date</th>" 
+			 			+ "<th>Customer Name</th>"
+			 			+ "<th>Address</th>"
+			 			+ "<th>Phone</th>"
+			 			+ "<th>Email</th>"
+			 			+ "<th>Total Amount (Rs.)</th>"
+			 			+ "<th>Update</th>"
+						+ "<th>Remove</th>" 
+			 			+ "</tr>"; 
+			 
+			 String query = "select * from order_ where orderID = '"+oID+"'";
+			 Statement stmt = con.createStatement(); 
+			 ResultSet rs = stmt.executeQuery(query); 
+			 // iterate through the rows in the result set
+			 while (rs.next()) { 
+				 String orderID = Integer.toString(rs.getInt("orderID"));
+				 String cartID = Integer.toString(rs.getInt("cartID"));
+				 String uID = Integer.toString(rs.getInt("uID"));
+				 String date = rs.getString("date");
+				 String custName = rs.getString("custName");
+				 String address = rs.getString("address");
+				 String phone = Integer.toString(rs.getInt("phone"));
+				 String email = rs.getString("email");
+				 String total = rs.getString("total");
+				 //  Add a row into the html table
+				 output += "<td>" + orderID + "</td>";
+				 output += "<td>" + cartID + "</td>";
+				 output += "<td>" + uID + "</td>";
 				 output += "<td>" + date + "</td>";
 				 output += "<td>" + custName + "</td>";
 				 output += "<td>" + address + "</td>";
@@ -117,6 +189,7 @@ public class OrderController {
 				 		 + "<input name='btnUpdate' type='submit' value='Update' class='btn btn-secondary'></td>"
 				 		 + "<input name='orderID' type='hidden' value='" + orderID + "'>"
 				 		 + "<input name='cartID' type='hidden' value='" + cartID + "'>"
+				 		 + "<input name='uID' type='hidden' value='" + uID + "'>"
 				 		 + "<input name='date' type='hidden' value='" + date + "'>"
 				 		 + "<input name='custName' type='hidden' value='" + custName + "'>"
 				 		 + "<input name='address' type='hidden' value='" + address + "'>"
@@ -138,11 +211,11 @@ public class OrderController {
 			 System.err.println(e.getMessage()); 
 		 } 
 		 return output; 
-	 }
+		 }
 	
 	
-	//=============================================Read order by particular orderID=======================================================
-		public String readOrderByID(String oID){ 
+		//========================================Read order by particular uID====================================================
+		public String readOrderByUserID(String userID){ 
 			 String output = ""; 
 			 try{ 
 				 Connection con = dbObj.connect(); 
@@ -154,6 +227,7 @@ public class OrderController {
 				 			+ "<tr>"
 				 			+ "<th>orderID</th>"
 				 			+ "<th>cartID</th>"
+				 			+ "<th>uID</th>"
 				 			+ "<th>Date</th>" 
 				 			+ "<th>Customer Name</th>"
 				 			+ "<th>Address</th>"
@@ -164,13 +238,14 @@ public class OrderController {
 							+ "<th>Remove</th>" 
 				 			+ "</tr>"; 
 				 
-				 String query = "select * from order_ where orderID = '"+oID+"'";
+				 String query = "select * from order_ where uID = '"+userID+"'";
 				 Statement stmt = con.createStatement(); 
 				 ResultSet rs = stmt.executeQuery(query); 
 				 // iterate through the rows in the result set
 				 while (rs.next()) { 
 					 String orderID = Integer.toString(rs.getInt("orderID"));
 					 String cartID = Integer.toString(rs.getInt("cartID"));
+					 String uID = Integer.toString(rs.getInt("uID"));
 					 String date = rs.getString("date");
 					 String custName = rs.getString("custName");
 					 String address = rs.getString("address");
@@ -180,6 +255,7 @@ public class OrderController {
 					 //  Add a row into the html table
 					 output += "<td>" + orderID + "</td>";
 					 output += "<td>" + cartID + "</td>";
+					 output += "<td>" + uID + "</td>";
 					 output += "<td>" + date + "</td>";
 					 output += "<td>" + custName + "</td>";
 					 output += "<td>" + address + "</td>";
@@ -191,6 +267,7 @@ public class OrderController {
 					 		 + "<input name='btnUpdate' type='submit' value='Update' class='btn btn-secondary'></td>"
 					 		 + "<input name='orderID' type='hidden' value='" + orderID + "'>"
 					 		 + "<input name='cartID' type='hidden' value='" + cartID + "'>"
+					 		 + "<input name='uID' type='hidden' value='" + uID + "'>"
 					 		 + "<input name='date' type='hidden' value='" + date + "'>"
 					 		 + "<input name='custName' type='hidden' value='" + custName + "'>"
 					 		 + "<input name='address' type='hidden' value='" + address + "'>"
@@ -213,7 +290,8 @@ public class OrderController {
 			 } 
 			 return output; 
 		 }
-	
+		
+		
 	//============================================to delete orders======================================================= 
 	public String deleteOrder(String orderID) { 
 		 String output = ""; 
