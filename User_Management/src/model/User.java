@@ -1,11 +1,12 @@
 package model;
 import java.sql.*;
+import java.util.Set;
 public class User
 { 
 	
             //Create Database Connection
 	
-            private Connection connect(){
+            private static Connection connect(){
             Connection con = null;
             try{
                Class.forName("com.mysql.jdbc.Driver");
@@ -198,4 +199,54 @@ public String updateUser(String ID, String firstName, String lastName, String ad
       }
       return output;
       }
+    
+    
+    public static boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet)
+    {
+        boolean isAllowed = false;
+        String role = "" , user = "", psw = "" ;
+        
+        try {
+        	Connection con = connect();
+    		if (con == null) {
+    			
+    			
+    		}
+    		// create a prepared statement
+    		String query = "SELECT * FROM users where userfirstName='"+username+"' and userpassword='"+password+"'";
+    		PreparedStatement preparedStmt = con.prepareStatement(query);
+    		
+    	
+    	   	preparedStmt.execute();
+    	   	//execute the statement
+    		  ResultSet rs = preparedStmt.executeQuery(query);
+    		 
+    		  if(rs.next()) {
+    			  user = rs.getString("userfirstName");
+    			  psw = rs.getString("userpassword");
+    			  role=rs.getString("usertype");
+    			 
+    		  }
+    		  con.close();
+    		  
+    		  
+    	} catch (Exception e) {
+    				
+    				System.err.println(e.getMessage());
+    			}
+        
+        if(username.equals(user) && password.equals(psw))
+        {
+             
+            //Step 2. Verify user role
+            if(rolesSet.contains(role))
+            {
+           	 
+                isAllowed = true;
+                System.out.println(username +" "+password );
+            }
+        }
+        return isAllowed;
+        
+    }
 }

@@ -1,7 +1,9 @@
 package com;
 import model.User;
 
-           //For REST Service
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+//For REST Service
            import javax.ws.rs.*;
            import javax.ws.rs.core.MediaType;
 
@@ -19,7 +21,35 @@ public class UserDetails{
             //create object for the User class
 			User userObj = new User();
 			
+			@RolesAllowed({"admin"})
+			@GET
+			@Path("/auths")
+			@Produces(MediaType.TEXT_PLAIN)
+			public boolean readadmin() {
+					
+				return true;
+				
+			}
+			
+			@RolesAllowed({"buyer"})
+			@GET
+			@Path("/buyer")
+			@Produces(MediaType.TEXT_PLAIN)
+			public boolean readbuyer() {
+				return true;
+			}
+			
+			@RolesAllowed({"Researcher"})
+			@GET
+			@Path("/buyer")
+			@Produces(MediaType.TEXT_PLAIN)
+			public boolean readresearcher() {
+				return true;
+			}
+			
+			
 			//Reading all Users
+			@RolesAllowed({"admin"})
             @GET
             @Path("/")
             @Produces(MediaType.TEXT_HTML)
@@ -30,6 +60,7 @@ public class UserDetails{
 	          }
 
             //Add insertuser for the Table
+			@PermitAll
             @POST
             @Path("/")
             @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -50,6 +81,7 @@ return output;
 }
 
             //Add Update user 
+			@RolesAllowed({"admin","buyer","Researcher"})
             @PUT
             @Path("/")
             @Consumes(MediaType.APPLICATION_JSON)
@@ -78,7 +110,7 @@ return output;
             }
 
             //Delete User for Specific userID
-
+			@PermitAll
             @DELETE
             @Path("/")
             @Consumes(MediaType.APPLICATION_XML)
