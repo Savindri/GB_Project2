@@ -1,5 +1,6 @@
 package com;
 
+import javax.annotation.security.RolesAllowed;
 //For REST Service
 import javax.ws.rs.*; 
 import javax.ws.rs.core.MediaType; 
@@ -21,6 +22,7 @@ public class OrderService {
 	OrderController orderObj = new OrderController(); 	
 	
 	//===================================to read all orders by admin====================================
+	@RolesAllowed({"admin"})
 	@GET
 	@Path("/") 
 	@Produces(MediaType.TEXT_HTML) 
@@ -29,6 +31,7 @@ public class OrderService {
 	}
 	
 	//==================================to read a paticular order by orderID============================
+	@RolesAllowed({"admin"})
 	@GET
 	@Path("orderID/{orderID}") 
 	@Produces(MediaType.TEXT_HTML) 
@@ -37,6 +40,7 @@ public class OrderService {
 	}
 	
 	//==================================to read a paticular order by uID================================
+	@RolesAllowed({"admin"})
 	@GET
 	@Path("uID/{uID}") 
 	@Produces(MediaType.TEXT_HTML) 
@@ -46,6 +50,7 @@ public class OrderService {
 	
 	
 	//=================================to insert order==================================================
+	@RolesAllowed({"buyer"})
 	@POST
 	@Path("/") 
 	//to specify the input type as form data
@@ -64,6 +69,7 @@ public class OrderService {
 	
 	
 	//================================to update order==========================================
+	@RolesAllowed({"buyer"})
 	@PUT
 	@Path("/")
 	//accept the input as JSON
@@ -85,6 +91,7 @@ public class OrderService {
 	
 	
 	//================================to delete an order=========================================
+	@RolesAllowed({"buyer"})
 	@DELETE
 	@Path("/")
 	//use XML for the input

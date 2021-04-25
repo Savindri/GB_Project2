@@ -120,7 +120,7 @@ public class CartController {
 		 return output; 
 	 }
 	
-	//==================================to delete items from cart=========================================
+	//==================================to delete items from cart by specific cartID=========================================
 	public String deleteFromCart(String cartID) { 
 		 String output = ""; 
 		 try{ 

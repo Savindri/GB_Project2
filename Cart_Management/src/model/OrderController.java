@@ -292,7 +292,7 @@ public class OrderController {
 		 }
 		
 		
-	//============================================to delete orders======================================================= 
+	//============================================to delete orders by specific order ID======================================================= 
 	public String deleteOrder(String orderID) { 
 		 String output = ""; 
 		 try{ 
