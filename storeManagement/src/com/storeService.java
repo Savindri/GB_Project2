@@ -1,6 +1,8 @@
 package com;
 
 import model.store;
+
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
 //For REST Service
@@ -20,7 +22,7 @@ import org.jsoup.nodes.Document;
 public class storeService {
 	store strObj = new store(); 
 //read operation========================================================================================
-		@RolesAllowed({"admin"})
+	@RolesAllowed({"admin","buyer"})
 		@GET
 		@Path("/product") 
 		@Produces(MediaType.TEXT_HTML) 
@@ -28,7 +30,8 @@ public class storeService {
 		{ 
 			return strObj.readStore(); 
 		}
-//read product by product id============================================================================		
+//read product by product id============================================================================
+		@RolesAllowed({"admin","buyer"})
 		@GET
 		@Path("/{pro_ID}") 
 		@Produces(MediaType.TEXT_HTML) 
@@ -38,6 +41,7 @@ public class storeService {
 			}
 		
 //insert operation======================================================================================
+		@RolesAllowed({"admin"})
 		@POST
 		@Path("/product")
 		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -53,6 +57,7 @@ public class storeService {
 		}
 		
 //update operation=====================================================================================
+		@RolesAllowed({"admin"})
 		@PUT
 		@Path("/product")
 		@Consumes(MediaType.APPLICATION_JSON)
@@ -77,6 +82,7 @@ public class storeService {
 		}
 		
 //delete operation====================================================================================
+		@RolesAllowed({"admin"})
 		@DELETE
 		@Path("/product")
 		@Consumes(MediaType.APPLICATION_XML)
@@ -95,6 +101,7 @@ public class storeService {
 			return output;
 		}
 //read product price related to a specific product ID================================================
+		@RolesAllowed({"admin"})
 		@GET
 		@Path("price/{pro_ID}") 
 		@Produces(MediaType.TEXT_HTML) 	
