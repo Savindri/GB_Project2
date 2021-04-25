@@ -3,7 +3,7 @@ package model;
 import java.sql.*;
 
 public class store {
-	//A common method to connect to the DB
+//A common method to connect to the DB==============================================================================
 	private Connection connect()
 	{
 		Connection con = null;
@@ -17,7 +17,7 @@ public class store {
 		{e.printStackTrace();}
 		return con;
 	}
-	//Insert Method
+//Insert Method=====================================================================================================
 	public String insertProduct(String proCode, String desc, String qty, String price, String category)
 	{
 		String output = "";
@@ -55,7 +55,7 @@ public class store {
 		}
 	return output;
 	}
-	//Read Method
+//Read Method===================================================================================================
 	public String readStore()
 	{
 		String output = "";
@@ -106,7 +106,7 @@ public class store {
 	}
 	
 	
-	//read one product
+//read one product============================================================================================================
 	public String readOrderByID(String pro_ID) {
 		String output = "";
 		try
@@ -153,7 +153,7 @@ public class store {
 	}
 	
 	
-	//update method
+//update method===========================================================================================================================
 	public String updateProduct(String pro_ID, String proCode, String desc, String qty, String price, String category)
 	{
 		String output = "";
@@ -189,7 +189,7 @@ public class store {
 		return output;
 	}
 	
-	//delete method
+//delete method===================================================================================================================
 	public String deleteProduct(String pro_ID)
 	{
 		String output = "";
@@ -219,7 +219,7 @@ public class store {
 		}
 		return output;
 	}
-//==========================to read price of a particular product======================================
+//to read price of a particular product=====================================================================================
 	public String readUnitPrice(String pro_ID){	 
 		String output = "";
 		//int id = Integer.parseInt(pro_ID);

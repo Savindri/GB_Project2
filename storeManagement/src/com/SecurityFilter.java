@@ -99,8 +99,23 @@ import javax.annotation.security.PermitAll;
 
 						//Checking the return value is equal to the user type when access the user management service
 						if (rolesSet.contains("admin")) {
-							webTarget = client.target("http://localhost:8090/TestLast/AuthService")
+							webTarget = client.target("http://localhost:8090/User_Management/myService")
 									.path("auth/auths");
+							//get the response from web target
+							Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
+
+							Response response = invocationBuilder.get();
+
+							// disallow access to improper URL
+							if (response.getStatus() != 200) {
+								Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
+										.entity("Unauthorized user..Access denied").build();
+								requestContext.abortWith(unauthoriazedStatus);
+							}
+						}else if(rolesSet.contains("buyer")) {
+							webTarget = client.target("http://localhost:8090/User_Management/myService")
+									.path("Users/buyer");	
+							
 							
 							//get the response from web target
 							Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
