@@ -2,7 +2,6 @@ package com;
 
 import model.store;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
 //For REST Service
@@ -21,17 +20,26 @@ import org.jsoup.nodes.Document;
 @Path("/pro")
 public class storeService {
 	store strObj = new store(); 
-//read operation========================================================================================
-	@RolesAllowed({"admin","buyer"})
-		@GET
-		@Path("/product") 
-		@Produces(MediaType.TEXT_HTML) 
-		public String readStore()
-		{ 
-			return strObj.readStore(); 
-		}
+//read operation for buyer==============================================================================
+	@RolesAllowed({"buyer"})
+	@GET
+	@Path("/buyer") 
+	@Produces(MediaType.TEXT_HTML) 
+	public String readStore1()
+	{ 
+		return strObj.readStore(); 
+	}	
+//read operation for admin =============================================================================
+	@RolesAllowed({"admin"})
+	@GET
+	@Path("/admin") 
+	@Produces(MediaType.TEXT_HTML) 
+	public String readStore2()
+	{ 
+		return strObj.readStore(); 
+	}
 //read product by product id============================================================================
-		@RolesAllowed({"admin","buyer"})
+		@RolesAllowed({"admin"})
 		@GET
 		@Path("/{pro_ID}") 
 		@Produces(MediaType.TEXT_HTML) 
