@@ -13,7 +13,7 @@ import org.jsoup.*;
 import org.jsoup.parser.*; 
 import org.jsoup.nodes.Document;
 
-//To implement the RESTful API
+//==========================================================To implement the RESTful API==========================================================
 
 
 @Path("/Cart")
@@ -42,9 +42,10 @@ public class CartService {
 			//Convert the input string to a JSON object
 			JsonObject cartObject = new JsonParser().parse(cartData).getAsJsonObject();
 			//Read the values from the JSON object
+			String uID = cartObject.get("uID").getAsString();
 			String pro_ID = cartObject.get("pro_ID").getAsString();
 			String quantity = cartObject.get("quantity").getAsString();
-			String output = cartObj.insertToCart(pro_ID, quantity);
+			String output = cartObj.insertToCart(uID, pro_ID, quantity);
 			return output; 
 		}
 	

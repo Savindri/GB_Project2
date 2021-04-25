@@ -20,7 +20,7 @@ public class OrderService {
 	
 	OrderController orderObj = new OrderController(); 	
 	
-	//===================================to read all orders====================================
+	//===================================to read all orders by admin====================================
 	@GET
 	@Path("/") 
 	@Produces(MediaType.TEXT_HTML) 
@@ -28,15 +28,24 @@ public class OrderService {
 		return orderObj.readOrder(); 
 	}
 	
-	//==================================to read a paticular order by orderID====================
+	//==================================to read a paticular order by orderID============================
 	@GET
-	@Path("/{orderID}") 
+	@Path("orderID/{orderID}") 
 	@Produces(MediaType.TEXT_HTML) 
-	public String readOrderByID(@PathParam("orderID") String orderID) { 
-		return orderObj.readOrderByID(orderID); 
+	public String readOrderByOrderID(@PathParam("orderID") String orderID) { 
+		return orderObj.readOrderByOrderID(orderID); 
 	}
 	
-	//=================================to insert order==========================================
+	//==================================to read a paticular order by uID================================
+	@GET
+	@Path("uID/{uID}") 
+	@Produces(MediaType.TEXT_HTML) 
+	public String readOrderByUserID(@PathParam("uID") String uID) { 
+		return orderObj.readOrderByUserID(uID); 
+	}
+	
+	
+	//=================================to insert order==================================================
 	@POST
 	@Path("/") 
 	//to specify the input type as form data
@@ -75,7 +84,7 @@ public class OrderService {
 	}
 	
 	
-	//================================to delete order=========================================
+	//================================to delete an order=========================================
 	@DELETE
 	@Path("/")
 	//use XML for the input

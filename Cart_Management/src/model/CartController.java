@@ -17,7 +17,7 @@ public class CartController {
 	DBConnection dbObj = new DBConnection();
 	
 	//=============================to insert items to cart=============================================
-	public String insertToCart(String pro_ID, String quantity){ 
+	public String insertToCart(String uID,String pro_ID, String quantity){ 
 		 String output = ""; 
 		 
 		 try{ 
@@ -26,8 +26,8 @@ public class CartController {
 				 return "Error while connecting to the database for inserting."; 
 			 } 
 			 // create a prepared statement
-			 String query = "insert into cart(`cartID`,`pro_ID`,`quantity`,`unitPrice`)"
-					 			+ " values (?, ?, ?, ?)"; 
+			 String query = "insert into cart(`cartID`,`uID`,`pro_ID`,`quantity`,`unitPrice`)"
+			 			+ " values (?, ?, ?, ?, ?)"; 
 				
 			 PreparedStatement preparedStmt = con.prepareStatement(query); 
 			 
@@ -39,13 +39,14 @@ public class CartController {
 				//To capture the returning value
 				String response = resource.type(MediaType.TEXT_PLAIN).get(String.class);
 			 
-			 // binding values
-			 preparedStmt.setInt(1, 0);
-			 preparedStmt.setString(2, pro_ID);
-			 preparedStmt.setInt(3, Integer.parseInt(quantity));
-			 preparedStmt.setDouble(4, Double.parseDouble(response));  
-			 // execute the statement
-			 preparedStmt.execute(); 
+				 // binding values
+				 preparedStmt.setInt(1, 0);
+				 preparedStmt.setInt(2, Integer.parseInt(uID));
+				 preparedStmt.setInt(3, Integer.parseInt(pro_ID));
+				 preparedStmt.setInt(4, Integer.parseInt(quantity));
+				 preparedStmt.setDouble(5, Double.parseDouble(response)); 
+				// execute the statement
+				 preparedStmt.execute(); 
 			 
 			 con.close(); 
 			 output = "Items Inserted successfully!"; 
@@ -68,13 +69,14 @@ public class CartController {
 			 // Prepare the html table to be displayed
 			 output = "<table border='1'>"
 			 			+ "<tr>"
-			 			+"<th>cartID</th>" 
+			 			+"<th>cartID</th>"
+			 			+"<th>uID</th>" 
 			 			+ "<th>Product ID</th>" 
 			 			+ "<th>Quantity</th>"
 			 			+ "<th>Unit_Price (Rs.)</th>"
 			 			+ "<th>Update</th>"
 						+ "<th>Remove</th>"
-			 			+ "</tr>"; 
+			 			+ "</tr>";  
 			 
 			 String query = "select * from cart"; 
 			 Statement stmt = con.createStatement(); 
@@ -83,11 +85,13 @@ public class CartController {
 			 // iterate through the rows in the result set
 			 while (rs.next()) { 
 				 String cartID = Integer.toString(rs.getInt("cartID"));
+				 String uID = Integer.toString(rs.getInt("uID"));
 				 String pro_ID = Integer.toString(rs.getInt("pro_ID"));
 				 String quantity = Integer.toString(rs.getInt("quantity"));
 				 String unitPrice = Double.toString(rs.getDouble("unitPrice")); 
 				 //  Add a row into the html table
 				 output += "<td>" + cartID + "</td>";
+				 output += "<td>" + uID + "</td>";
 				 output += "<td>" + pro_ID + "</td>";
 				 output += "<td>" + quantity + "</td>";
 				 output += "<td>" + unitPrice + "</td>";
@@ -95,6 +99,7 @@ public class CartController {
 				 output += "<td><form method='post' action='updateCart.jsp'>"
 				 		 + "<input name='btnUpdate' type='submit' value='Update' class='btn btn-secondary'></td>"
 				 		 + "<input name='cartID' type='hidden' value='" + cartID + "'>"
+				 		 + "<input name='uID' type='hidden' value='" + uID + "'>"
 				 		 + "<input name='pro_ID' type='hidden' value='" + pro_ID + "'>"
 				 		 + "<input name='quantity' type='hidden' value='" + quantity + "'>"
 				 		 + "<input name='unitPrice' type='hidden' value='" + unitPrice + "'>"
