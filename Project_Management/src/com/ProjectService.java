@@ -61,7 +61,8 @@ public class ProjectService {
 		String productCategory = projectObject.get("productCategory").getAsString();
 		String sellOrNot = projectObject.get("sellOrNot").getAsString();
 		String description = projectObject.get("description").getAsString();
-		String output = projectObj.insertProject(projectName, budget, completionDate, productCategory, sellOrNot, description);
+		String userID = projectObject.get("userID").getAsString();
+		String output = projectObj.insertProject(projectName, budget, completionDate, productCategory, sellOrNot, description,userID);
 		
 		return output; 
 		
