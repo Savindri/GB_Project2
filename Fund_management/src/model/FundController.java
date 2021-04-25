@@ -149,7 +149,7 @@ public class FundController {
 	
 	//============================= Admin Updating the Fund Details ===========================// 
 		
-	 public String updateItem(int fundid , String Fund_announcement , String Fund_duration,String instructions , String Amount)
+	 public String UpdateFund(int fundid , String Fund_announcement , String Fund_duration,String instructions , String Amount)
 	 { 
 	 	String output = "";
 	 	
@@ -397,35 +397,6 @@ public class FundController {
 				
 		}		
 			
-	public String retval(String ID) {
-		
-		String output = "";
-		
-		try {
-			
-			Connection con = DBConnect.connect();
-			if (con == null) {
-				return "Error while connecting to the database for deleting.";
-			}
-			// create a prepared statement
-			String query = "SELECT budget FROM project_proposals Where proposal_ID = '"+ID+"' ";
-			
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			
-			ResultSet rs = preparedStmt.executeQuery(query);
-			while (rs.next())
-			{
-				String Budget = Double.toString(rs.getDouble("budget"));
-				return (Budget);
-			}
-			preparedStmt.execute();
-			con.close();
-			
-		} catch (Exception e) {
-			
-			System.err.println(e.getMessage());
-		}
-		return output;
-	}
+//	
 
 }

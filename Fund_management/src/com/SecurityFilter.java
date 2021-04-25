@@ -100,12 +100,10 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 					if (rolesSet.contains("admin")) {
 						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
 								.path("auth/admin");
-					}else if (rolesSet.contains("buyer")) {
+					}else if (rolesSet.contains("researcher")) {
 						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
-								.path("auth/buyer");
-					}else {
-						webTarget = client.target("http://localhost:8090/TestLast/AuthService")
-								.path("auth/Researcher");
+								.path("auth/researcher");
+						
 						//get the response from web target
 						Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
 
@@ -114,8 +112,9 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 						// disallow access to improper URL
 						if (response.getStatus() != 200) {
 							Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
-									.entity("Unauthorized user..Access denied").build();
+									.entity("Unauthorized user..Access denied_1").build();
 							requestContext.abortWith(unauthoriazedStatus);
+
 						}
 					}
 
@@ -127,6 +126,9 @@ if (method.isAnnotationPresent(DenyAll.class)) {
 		// disallow access to improper URLs
 		Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
 				.entity("Status 3 - Access denied").build();
-		requestContext.abortWith(unauthoriazedStatus);				
+		requestContext.abortWith(unauthoriazedStatus);
+
+		
+		
 	}
 }
