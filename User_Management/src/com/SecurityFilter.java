@@ -34,12 +34,12 @@ public class SecurityFilter implements ContainerRequestFilter {
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		
-		// TODO Auto-generated method stub
-		List<String> authHeader = requestContext.getHeaders().get(AUTHENTICATION_HEADER_KEY);
+	  // TODO Auto-generated method stub
+	  List<String> authHeader = requestContext.getHeaders().get(AUTHENTICATION_HEADER_KEY);
 		
 		Method method = resourceInfo.getResourceMethod();
 		
-		 if( ! method.isAnnotationPresent(PermitAll.class))
+      if( ! method.isAnnotationPresent(PermitAll.class))
 	        {
 			    //Access denied for All
 	            if(method.isAnnotationPresent(DenyAll.class))
@@ -51,8 +51,9 @@ public class SecurityFilter implements ContainerRequestFilter {
 	            		requestContext.abortWith(unauthoriazedStatus);
 	            		
 	            }
-	    //implement the security filter method        
-		if(authHeader != null && authHeader.size() > 0 ) {
+	            
+	  //implement the security filter method        
+      if(authHeader != null && authHeader.size() > 0 ) {
 			
 			String authToken = authHeader.get(0);
 			authToken = authToken.replaceFirst(AUTHENTICATION_HEADER_PREFIX, "");
@@ -99,11 +100,11 @@ public class SecurityFilter implements ContainerRequestFilter {
 			
 		}
 	        }
-		Response unauthoriazedStatus = Response
-											.status(Response.Status.UNAUTHORIZED)
-											.entity("Unauthorized user...You cannot access this")
-											.build(); 
-		requestContext.abortWith(unauthoriazedStatus);
+		              Response unauthoriazedStatus = Response
+                			  .status(Response.Status.UNAUTHORIZED)
+							  .entity("Unauthorized user...You cannot access this")
+							  .build(); 
+		              requestContext.abortWith(unauthoriazedStatus);
 	        
 	  }
 
