@@ -1,5 +1,6 @@
 package com;
 
+import javax.annotation.security.RolesAllowed;
 //For REST Service
 import javax.ws.rs.*; 
 import javax.ws.rs.core.MediaType; 
@@ -23,6 +24,7 @@ public class CartService {
 	
 	
 		//=========================to read cart========================================================
+		@RolesAllowed({"admin"})
 		@GET
 		@Path("/") 
 		@Produces(MediaType.TEXT_HTML) 
@@ -32,6 +34,7 @@ public class CartService {
 	
 	
 		//=======================to insert into cart===================================================
+		@RolesAllowed({"buyer"})
 		@POST
 		@Path("/") 
 		//to specify the input type as form data
@@ -51,6 +54,7 @@ public class CartService {
 	
 	
 		//============================to update cart====================================
+		@RolesAllowed({"buyer"})
 		@PUT
 		@Path("/")
 		//accept the input as JSON
@@ -70,6 +74,7 @@ public class CartService {
 	
 	
 		//========================to delete items from cart============================
+		@RolesAllowed({"buyer"})
 		@DELETE
 		@Path("/")
 		//use XML for the input
